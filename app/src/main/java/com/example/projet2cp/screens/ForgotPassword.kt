@@ -73,7 +73,8 @@ fun ForgotPassword(navController: NavHostController ) {
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 FunTextField(
-                    label = "Enter email adress", trailing = "",
+                    label = "Enter email adress",
+                    onTextSelected = {},
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(27.dp))

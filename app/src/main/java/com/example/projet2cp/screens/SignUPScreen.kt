@@ -28,8 +28,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
+import com.example.projet2cp.data.LoginViewModel
+import com.example.projet2cp.data.UIEvent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
 import com.example.projet2cp.login.SocialMediaLogIn
@@ -37,7 +40,10 @@ import com.example.projet2cp.ui.theme.MyBlue
 
 
 @Composable
-fun SigninScreen(navController: NavHostController) {
+fun SigninScreen(
+    navController: NavHostController,
+    loginViewModel: LoginViewModel= viewModel()
+) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -48,8 +54,8 @@ fun SigninScreen(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(
-                    start = screenWidth * 0.05f, // 5% of screen width
-                    end = screenWidth * 0.05f // 5% of screen width
+                    start = screenWidth * 0.05f,
+                    end = screenWidth * 0.05f
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -97,7 +103,7 @@ fun SigninScreen(navController: NavHostController) {
                                 fontWeight = FontWeight.Normal
                             )
                             Text(
-                                text = "Log In",
+                                text = "Sign In",
                                 color = Color(0xFF000000),
                                 fontSize = 14.sp,
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
@@ -119,22 +125,40 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControlle
     ) {
         Spacer(modifier = Modifier.height(screenHeight * 0.09f))
         Text(
-            text = "Sing In",
+            text = "Sing UP",
             fontFamily = FontFamily(listOf(Font(R.font.poppins_extrabold))),
-            fontSize = 32.sp, // Adjusted to a fixed size for consistency
+            fontSize = 32.sp,
             color = MyBlue
         )
     }
 }
 
 @Composable
-fun SinginSection(screenWidth: Dp, screenHeight: Dp) {
+fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewModel= viewModel()) {
 
-    FunTextField(label = "User Name", trailing = "", modifier = Modifier.fillMaxWidth())
+    FunTextField(
+        label = "User Name",
+        onTextSelected = {
+            loginViewModel.onEvent(UIEvent.UserNameChanged(it))
+        } ,
+        modifier = Modifier.fillMaxWidth()
+    )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
-    FunTextField(label = "Email", trailing = "", modifier = Modifier.fillMaxWidth())
+    FunTextField(
+        label = "Email",
+        onTextSelected = {
+            loginViewModel.onEvent(UIEvent.EmailChanged(it))
+        } ,
+        modifier = Modifier.fillMaxWidth()
+    )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
-    FunPassWordField(label = "Password",  modifier = Modifier.fillMaxWidth())
+    FunPassWordField(
+        label = "Password",
+        onTextSelected = {
+            loginViewModel.onEvent(UIEvent.PasswordChanged(it))
+        } ,
+        modifier = Modifier.fillMaxWidth()
+    )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
     val isEnableed : Boolean = false
     Button(
@@ -150,7 +174,7 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp) {
         enabled = isEnableed
     ) {
         Text(
-            text = "Sing In",
+            text = "Sing UP",
             fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
             fontSize = 14.sp
         )

@@ -97,7 +97,7 @@ fun LoginScreen(navController: NavHostController) {
                                 fontWeight = FontWeight.Normal
                             )
                             Text(
-                                text = "Sign In",
+                                text = "Sign UP",
                                 color = Color(0xFF000000),
                                 fontSize = 14.sp,
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
@@ -128,7 +128,7 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
             contentDescription = "",
         )
         Text(
-            text = "Login",
+            text = "Sign In",
             fontFamily = FontFamily(listOf(Font(R.font.poppins_extrabold))),
             fontSize = 32.sp,
             color = MyBlue
@@ -138,10 +138,11 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
 
 @Composable
 fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController) {
-    FunTextField(label = "Email", trailing = "", modifier = Modifier.fillMaxWidth())
+    FunTextField(label = "Email", onTextSelected = {} ,modifier = Modifier.fillMaxWidth())
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     FunPassWordField(
         label = "Password",
+        onTextSelected = {},
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
@@ -166,7 +167,7 @@ fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControl
     )
     {
         Text(
-            text = "Log In",
+            text = "Sign In",
             fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
             fontSize = 14.sp
         )

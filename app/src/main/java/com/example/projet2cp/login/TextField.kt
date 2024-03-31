@@ -43,8 +43,8 @@ import com.example.projet2cp.ui.theme.MyBlue
 fun FunTextField(
     modifier: Modifier = Modifier,
     label: String,
-    trailing: String,
-    errorStatus:Boolean=false
+    errorStatus:Boolean=false,
+    onTextSelected:(String)->Unit
 ) {
 
 
@@ -62,7 +62,10 @@ fun FunTextField(
         maxLines = 1,
         singleLine = true,
         value = textValue.value,
-        onValueChange = { textValue.value = it },
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
 
         label = {
             Text(
@@ -79,16 +82,7 @@ fun FunTextField(
             cursorColor = MyBlue
 
         ),
-        trailingIcon = {
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(
-                    text = trailing,
-                    fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
-                    color = Color(0xFF000113),
 
-                )
-            }
-        },
         isError = !errorStatus
     )
 }
@@ -98,7 +92,8 @@ fun FunTextField(
 fun FunPassWordField(
     modifier: Modifier = Modifier,
     label: String,
-    errorStatus:Boolean=false
+    errorStatus:Boolean=false,
+    onTextSelected:(String)->Unit
 ) {
     val configuration = LocalConfiguration.current
 
@@ -125,7 +120,10 @@ fun FunPassWordField(
         maxLines = 1,
         singleLine = true,
         value = password.value,
-        onValueChange = { password.value = it },
+        onValueChange = {
+            password.value = it
+            onTextSelected(it)
+        },
         shape = RoundedCornerShape(12.dp),
         label = {
             Text(
