@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "674714294123",
+    "project_id": "mbis-f2f0a",
+    "storage_bucket": "mbis-f2f0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674714294123:android:b914126f8d8594ee399e2e",
+        "android_client_info": {
+          "package_name": "com.example.projet2cp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzuTZ7qoFmBuUcYeKKR_AHNJ-HOkH5gOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

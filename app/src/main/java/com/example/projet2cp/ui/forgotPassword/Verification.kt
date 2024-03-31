@@ -1,0 +1,72 @@
+package com.example.projet2cp.ui.forgotPassword
+
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.projet2cp.R
+import com.example.projet2cp.ui.theme.MyBlue
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun Verification() {
+    Surface (
+        modifier = Modifier.fillMaxSize()
+
+    ){
+        Spacer(modifier = Modifier.height(66.dp))
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = "Verification",
+                            fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
+                            fontSize = 20.sp,
+                        )
+                    },
+                    navigationIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.vector)  ,
+                            contentDescription = "",
+                            modifier= Modifier.padding(
+                                start = 14.dp
+                            )
+
+                        )
+                    },
+
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.White,
+                        navigationIconContentColor = MyBlue,
+
+
+
+                    )
+                )
+            },
+            containerColor = Color.White
+        ) {it
+
+
+
+        }
+    }
+}
