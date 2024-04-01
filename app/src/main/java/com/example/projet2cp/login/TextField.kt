@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import com.example.projet2cp.R
 import com.example.projet2cp.ui.theme.MyBleu
+import com.example.projet2cp.ui.theme.MyGray
 import com.example.projet2cp.ui.theme.MyPurple
 
 
@@ -83,7 +84,9 @@ fun FunTextField(
             unfocusedBorderColor = uiColor,
             errorBorderColor = uiColor,
             cursorColor = uiColor,
-            errorTextColor = Color.Red
+            errorTextColor = Color.Red,
+            focusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
+            unfocusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
 
         ),
 
@@ -150,9 +153,13 @@ fun FunPassWordField(
             unfocusedBorderColor = Color.Transparent,
             errorBorderColor = Color.Transparent,
             cursorColor = uiColor,
-            errorTextColor = Color.Red
+            errorTextColor = Color.Red,
+            focusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
+            unfocusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
 
-        ),
+
+
+            ),
         trailingIcon = {
             val iconImage = if (passwordVisible.value) {
                 if (isSystemInDarkTheme()) painterResource(id = R.drawable.visibilitydark) else painterResource(id = R.drawable.visibility)
