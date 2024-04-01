@@ -3,12 +3,15 @@ package com.example.projet2cp.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -165,4 +168,27 @@ fun FunPassWordField(
         visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
         isError = !errorStatus
     )
+}
+
+@Composable
+fun ButtonComponent(value:String, onButtonClicked :()->Unit ){
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp),
+        onClick = {
+                  onButtonClicked.invoke()
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MyBlue,
+            contentColor = Color.White
+        ),
+        shape = RoundedCornerShape(12.dp),
+    ) {
+        Text(
+            text = value,
+            fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
+            fontSize = 14.sp
+        )
+    }
 }

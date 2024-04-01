@@ -30,8 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
+import com.example.projet2cp.data.LoginViewModel
+import com.example.projet2cp.data.UIEvent
+import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
 import com.example.projet2cp.ui.theme.MyBlue
@@ -137,7 +141,7 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
 }
 
 @Composable
-fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController) {
+fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel: LoginViewModel = viewModel()) {
     FunTextField(label = "Email", onTextSelected = {} ,modifier = Modifier.fillMaxWidth())
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     FunPassWordField(
@@ -154,23 +158,10 @@ fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControl
         modifier = Modifier.clickable { navController.navigate("forgotPassword") }
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp),
-        onClick = { /*TODO*/ },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MyBlue,
-            contentColor = Color.White
-        ),
-        shape = RoundedCornerShape(12.dp)
+    ButtonComponent(value = "Sign In",
+        onButtonClicked ={
+            loginViewModel.onEvent(UIEvent.SignUpButtonClicked)
+        }
     )
-    {
-        Text(
-            text = "Sign In",
-            fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
-            fontSize = 14.sp
-        )
-    }
 }
 

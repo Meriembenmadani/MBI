@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import com.example.projet2cp.R
 import com.example.projet2cp.data.LoginViewModel
 import com.example.projet2cp.data.UIEvent
+import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
 import com.example.projet2cp.login.SocialMediaLogIn
@@ -160,23 +161,10 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
         modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
-    val isEnableed : Boolean = false
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp),
-        onClick = { /*TODO*/ },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MyBlue,
-            contentColor = Color.White
-        ),
-        shape = RoundedCornerShape(12.dp),
-        enabled = isEnableed
-    ) {
-        Text(
-            text = "Sing UP",
-            fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
-            fontSize = 14.sp
-        )
-    }
+
+    ButtonComponent(value = "Sign Up",
+        onButtonClicked ={
+            loginViewModel.onEvent(UIEvent.SignUpButtonClicked)
+        }
+    )
 }
