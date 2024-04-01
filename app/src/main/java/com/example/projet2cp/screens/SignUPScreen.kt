@@ -142,7 +142,8 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
         onTextSelected = {
             loginViewModel.onEvent(UIEvent.UserNameChanged(it))
         } ,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        errorStatus = loginViewModel.registrationUIState.value.userNameError
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
     FunTextField(
@@ -150,7 +151,8 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
         onTextSelected = {
             loginViewModel.onEvent(UIEvent.EmailChanged(it))
         } ,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        errorStatus = loginViewModel.registrationUIState.value.emailError
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
     FunPassWordField(
@@ -158,7 +160,8 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
         onTextSelected = {
             loginViewModel.onEvent(UIEvent.PasswordChanged(it))
         } ,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        errorStatus = loginViewModel.registrationUIState.value.passwordError
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
 

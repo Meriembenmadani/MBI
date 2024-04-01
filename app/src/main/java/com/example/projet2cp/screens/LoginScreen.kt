@@ -142,12 +142,18 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
 
 @Composable
 fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel: LoginViewModel = viewModel()) {
-    FunTextField(label = "Email", onTextSelected = {} ,modifier = Modifier.fillMaxWidth())
+    FunTextField(
+        label = "Email",
+        onTextSelected = {} ,
+        modifier = Modifier.fillMaxWidth(),
+        errorStatus = loginViewModel.registrationUIState.value.userNameError
+        )
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     FunPassWordField(
         label = "Password",
         onTextSelected = {},
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        errorStatus = loginViewModel.registrationUIState.value.passwordError
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     Text(

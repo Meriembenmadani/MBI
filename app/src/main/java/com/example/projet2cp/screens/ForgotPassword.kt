@@ -26,13 +26,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projet2cp.R
+import com.example.projet2cp.data.LoginViewModel
 import com.example.projet2cp.login.FunTextField
 import com.example.projet2cp.ui.theme.MyBlue
 
 
 @Composable
-fun ForgotPassword(navController: NavHostController ) {
+fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewModel = viewModel() ) {
     Surface (
         modifier = Modifier.fillMaxSize()
 
@@ -75,7 +77,8 @@ fun ForgotPassword(navController: NavHostController ) {
                 FunTextField(
                     label = "Enter email adress",
                     onTextSelected = {},
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    errorStatus = loginViewModel.registrationUIState.value.emailError
                 )
                 Spacer(modifier = Modifier.height(27.dp))
                 Button(

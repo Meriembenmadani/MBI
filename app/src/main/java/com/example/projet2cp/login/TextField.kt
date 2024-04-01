@@ -46,8 +46,9 @@ import com.example.projet2cp.ui.theme.MyBlue
 fun FunTextField(
     modifier: Modifier = Modifier,
     label: String,
-    errorStatus:Boolean=false,
-    onTextSelected:(String)->Unit
+    errorStatus:Boolean,
+    onTextSelected:(String)->Unit,
+
 ) {
 
 
@@ -95,7 +96,7 @@ fun FunTextField(
 fun FunPassWordField(
     modifier: Modifier = Modifier,
     label: String,
-    errorStatus:Boolean=false,
+    errorStatus:Boolean,
     onTextSelected:(String)->Unit
 ) {
     val configuration = LocalConfiguration.current
