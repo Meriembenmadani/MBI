@@ -8,9 +8,13 @@ object validator {
 
     }
     fun validateEmail(e:String) :ValidationResult{
-        return ValidationResult(
-            (!e.isNullOrEmpty()  )
-        )
+        val isNotEmpty = !e.isNullOrEmpty()
+
+
+        val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+
+        val isValidFormat = emailPattern.matches(e)
+        return ValidationResult(isNotEmpty && isValidFormat)
     }
     fun validatePassword(pass:String) :ValidationResult{
         return ValidationResult(
