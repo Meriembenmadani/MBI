@@ -1,5 +1,6 @@
 package com.example.projet2cp.ui.forgotPassword
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -21,7 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projet2cp.R
-import com.example.projet2cp.ui.theme.MyBlue
+import com.example.projet2cp.ui.theme.MyBleu
+import com.example.projet2cp.ui.theme.MyPurple
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -31,6 +33,7 @@ fun Verification() {
         modifier = Modifier.fillMaxSize()
 
     ){
+        val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
         Spacer(modifier = Modifier.height(66.dp))
         Scaffold(
             topBar = {
@@ -55,7 +58,7 @@ fun Verification() {
 
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.White,
-                        navigationIconContentColor = MyBlue,
+                        navigationIconContentColor = uiColor,
 
 
 

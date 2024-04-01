@@ -1,6 +1,7 @@
 package com.example.projet2cp.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +35,10 @@ import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
 import com.example.projet2cp.login.SocialMediaLogIn
-import com.example.projet2cp.ui.theme.MyBlue
+import com.example.projet2cp.ui.theme.Black
+import com.example.projet2cp.ui.theme.MyBleu
+import com.example.projet2cp.ui.theme.MyPurple
+
 
 
 @Composable
@@ -49,7 +50,8 @@ fun SigninScreen(
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        color = if (isSystemInDarkTheme()) Black else Color.White
     ) {
         Column(
             modifier = Modifier
@@ -60,8 +62,10 @@ fun SigninScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val uiColor = if (isSystemInDarkTheme()) Color.White else Black
+
             TopSection(screenWidth, screenHeight,navController)
-            Spacer(modifier = Modifier.height(screenHeight * 0.04f)) // Increased to 4% of screen height
+            Spacer(modifier = Modifier.height(screenHeight * 0.04f))
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -97,7 +101,7 @@ fun SigninScreen(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = "Do you have account?",
+                                text = "Do you have account? ",
                                 color = Color(0xFF94A3B8),
                                 fontSize = 14.sp,
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
@@ -105,7 +109,7 @@ fun SigninScreen(
                             )
                             Text(
                                 text = "Sign In",
-                                color = Color(0xFF000000),
+                                color = if (isSystemInDarkTheme()) Color.White else Color(0xFF000000),
                                 fontSize = 14.sp,
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                                 fontWeight = FontWeight.Medium,
@@ -121,6 +125,7 @@ fun SigninScreen(
 
 @Composable
 fun TopSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController) {
+    val uiCol = if (isSystemInDarkTheme()) MyPurple else MyBleu
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -129,7 +134,7 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControlle
             text = "Sing UP",
             fontFamily = FontFamily(listOf(Font(R.font.poppins_extrabold))),
             fontSize = 32.sp,
-            color = MyBlue
+            color =  if (isSystemInDarkTheme()) Color.White else MyBleu
         )
     }
 }
@@ -168,6 +173,7 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
     ButtonComponent(value = "Sign Up",
         onButtonClicked ={
             loginViewModel.onEvent(UIEvent.SignUpButtonClicked)
-        }
+        },
+        isEnabled =
     )
 }

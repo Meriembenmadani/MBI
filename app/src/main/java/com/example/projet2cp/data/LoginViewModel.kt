@@ -9,24 +9,28 @@ import com.example.projet2cp.data.rules.validator.validateUserName
 class LoginViewModel: ViewModel() {
    private val TAG = LoginViewModel::class.simpleName
    var registrationUIState = mutableStateOf(RegistrationUIState())
+   var allValidationPassed = mutableStateOf(false)
    fun onEvent(event:UIEvent){
       when(event){
           is UIEvent.UserNameChanged -> {
              registrationUIState.value = registrationUIState.value.copy(
                 userName = event.userName
              )
+             validateDataWithRules()
              printState()
           }
          is UIEvent.EmailChanged -> {
             registrationUIState.value = registrationUIState.value.copy(
                email = event.email
             )
+            validateDataWithRules()
             printState()
          }
          is UIEvent.PasswordChanged -> {
             registrationUIState.value = registrationUIState.value.copy(
                password = event.password
             )
+            validateDataWithRules()
             printState()
          }
          is UIEvent.SignUpButtonClicked ->{

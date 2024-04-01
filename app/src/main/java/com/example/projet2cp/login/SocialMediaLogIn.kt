@@ -27,6 +27,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projet2cp.R
+import com.example.projet2cp.ui.theme.Black
+import com.example.projet2cp.ui.theme.MyPurple
 
 @Composable
 fun SocialMediaLogIn(
@@ -39,9 +41,14 @@ fun SocialMediaLogIn(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFFF1F5F9))
+            .background( if (isSystemInDarkTheme()) Black else Color(0xFFF1F5F9))
             .clickable { onClick }
-            .height(40.dp),
+            .height(40.dp)
+            .border(
+                width = 1.dp,
+                color =  if (isSystemInDarkTheme()) MyPurple else Color.Transparent,
+                shape = RoundedCornerShape(12.dp)
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ){

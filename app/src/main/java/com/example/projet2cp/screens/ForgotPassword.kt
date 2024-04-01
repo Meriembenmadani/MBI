@@ -1,6 +1,7 @@
 package com.example.projet2cp.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,16 +31,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projet2cp.R
 import com.example.projet2cp.data.LoginViewModel
 import com.example.projet2cp.login.FunTextField
-import com.example.projet2cp.ui.theme.MyBlue
+import com.example.projet2cp.ui.theme.Black
+import com.example.projet2cp.ui.theme.MyBleu
+import com.example.projet2cp.ui.theme.MyPurple
 
 
 @Composable
 fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewModel = viewModel() ) {
     Surface (
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        color = if (isSystemInDarkTheme()) Black else Color.White
 
     ){
-
+        val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
 
         Column(
             modifier = Modifier
@@ -56,7 +60,7 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                 text = "Forgot password ?",
                 fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
                 fontSize = 20.sp,
-                color = Color(0xFF444444)
+                color =  if (isSystemInDarkTheme()) MyPurple else Color(0xFF444444)
             )
 
             Column(
@@ -71,7 +75,7 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                     text = " Don’t worry! It happens. Please enter the email associated with your account.",
                     fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                     fontSize = 15.2.sp,
-                    color = Color(0xB3000000)
+                    color =  if (isSystemInDarkTheme()) Color.White else Color(0xB3000000)
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 FunTextField(
@@ -87,7 +91,7 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                         .height(40.dp),
                     onClick = { /*TODO*/ },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MyBlue,
+                        containerColor = uiColor,
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(12.dp)
@@ -130,7 +134,7 @@ fun gotologin() {
             )
             Text(
                 text = "Log In",
-                color = Color(0xFF000000),
+                color =  if (isSystemInDarkTheme()) Color.White else  Color(0xFF000000),
                 fontSize = 14.sp,
                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                 fontWeight = FontWeight.Medium,

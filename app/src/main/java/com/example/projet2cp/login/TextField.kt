@@ -2,21 +2,17 @@ package com.example.projet2cp.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -38,7 +34,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import com.example.projet2cp.R
-import com.example.projet2cp.ui.theme.MyBlue
+import com.example.projet2cp.ui.theme.MyBleu
+import com.example.projet2cp.ui.theme.MyPurple
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +47,7 @@ fun FunTextField(
     onTextSelected:(String)->Unit,
 
 ) {
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
 
 
     val textValue = remember { mutableStateOf("") }
@@ -59,12 +57,13 @@ fun FunTextField(
 
     androidx.compose.material3.OutlinedTextField(
         modifier = modifier
-            .border(width = 2.dp ,color = MyBlue, shape = RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.dp))
             .fillMaxWidth(),
 
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         maxLines = 1,
         singleLine = true,
+        shape = RoundedCornerShape(12.dp),
         value = textValue.value,
         onValueChange = {
             textValue.value = it
@@ -75,15 +74,16 @@ fun FunTextField(
             Text(
                 text = label,
                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
-                color = Color(0xFF475569),
+                color = if (isSystemInDarkTheme()) Color.White else Color(0xFF475569),
 
             )
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-            errorBorderColor = Color.Transparent,
-            cursorColor = MyBlue
+            focusedBorderColor = uiColor,
+            unfocusedBorderColor = uiColor,
+            errorBorderColor = uiColor,
+            cursorColor = uiColor,
+            errorTextColor = Color.Red
 
         ),
 
@@ -101,7 +101,7 @@ fun FunPassWordField(
 ) {
     val configuration = LocalConfiguration.current
 
-
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     val password = remember { mutableStateOf("") }
     val localFocusManager = LocalFocusManager.current
     val passwordVisible = remember {
@@ -111,9 +111,14 @@ fun FunPassWordField(
 
     androidx.compose.material3.TextField(
         modifier = modifier
-            .border(width = 2.dp ,color = MyBlue, shape = RoundedCornerShape(12.dp))
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = 2.dp,
+                color = uiColor,
+                shape = RoundedCornerShape(12.dp)
+            )
+         ,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done
@@ -121,35 +126,38 @@ fun FunPassWordField(
         keyboardActions = KeyboardActions {
             localFocusManager.clearFocus()
         },
+        shape = RectangleShape,
         maxLines = 1,
+
         singleLine = true,
         value = password.value,
         onValueChange = {
             password.value = it
             onTextSelected(it)
         },
-        shape = RoundedCornerShape(12.dp),
+
         label = {
             Text(
                 text = label,
                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
-                color = Color(0xFF475569),
+                color = if (isSystemInDarkTheme()) Color.White else Color(0xFF475569),
 
             )
         },
 
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MyBlue,
-            unfocusedBorderColor = MyBlue,
-            errorBorderColor = MyBlue,
-            cursorColor = MyBlue
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            errorBorderColor = Color.Transparent,
+            cursorColor = uiColor,
+            errorTextColor = Color.Red
 
         ),
         trailingIcon = {
             val iconImage = if (passwordVisible.value) {
-                painterResource(id = R.drawable.visibility)
+                if (isSystemInDarkTheme()) painterResource(id = R.drawable.visibilitydark) else painterResource(id = R.drawable.visibility)
             } else {
-                painterResource(id = R.drawable.visibilityoff)
+                if (isSystemInDarkTheme()) painterResource(id = R.drawable.visibility_off_dark) else   painterResource(id = R.drawable.visibilityoff)
             }
 
             val description = if (passwordVisible.value) {
@@ -172,7 +180,8 @@ fun FunPassWordField(
 }
 
 @Composable
-fun ButtonComponent(value:String, onButtonClicked :()->Unit ){
+fun ButtonComponent(value:String, onButtonClicked :()->Unit, isEnabled : Boolean =false){
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -181,10 +190,11 @@ fun ButtonComponent(value:String, onButtonClicked :()->Unit ){
                   onButtonClicked.invoke()
         },
         colors = ButtonDefaults.buttonColors(
-            containerColor = MyBlue,
+            containerColor = uiColor,
             contentColor = Color.White
         ),
         shape = RoundedCornerShape(12.dp),
+        enabled = isEnabled
     ) {
         Text(
             text = value,

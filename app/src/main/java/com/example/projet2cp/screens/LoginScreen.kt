@@ -2,6 +2,7 @@ package com.example.projet2cp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +37,9 @@ import com.example.projet2cp.data.UIEvent
 import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
-import com.example.projet2cp.ui.theme.MyBlue
+import com.example.projet2cp.ui.theme.Black
+import com.example.projet2cp.ui.theme.MyBleu
+import com.example.projet2cp.ui.theme.MyPurple
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -46,7 +47,8 @@ fun LoginScreen(navController: NavHostController) {
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        color = if (isSystemInDarkTheme()) Black else Color.White
     ) {
         Column(
             modifier = Modifier
@@ -65,7 +67,7 @@ fun LoginScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 LoginSection(screenWidth, screenHeight,navController)
-                Spacer(modifier = Modifier.height(screenHeight * 0.02f)) // Increased to 2% of screen height
+                Spacer(modifier = Modifier.height(screenHeight * 0.02f))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -94,7 +96,7 @@ fun LoginScreen(navController: NavHostController) {
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = "Don't have account?",
+                                text = "Don't have account? ",
                                 color = Color(0xFF94A3B8),
                                 fontSize = 14.sp,
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
@@ -102,7 +104,7 @@ fun LoginScreen(navController: NavHostController) {
                             )
                             Text(
                                 text = "Sign UP",
-                                color = Color(0xFF000000),
+                                color = if (isSystemInDarkTheme()) Color.White else Color(0xFF000000),
                                 fontSize = 14.sp,
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                                 fontWeight = FontWeight.Medium,
@@ -118,6 +120,7 @@ fun LoginScreen(navController: NavHostController) {
 
 @Composable
 fun TopSection(screenWidth: Dp, screenHeight: Dp) {
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -128,14 +131,14 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
                     bottom = screenHeight * 0.025f
                 )
                 .size(screenWidth * 0.4f, screenHeight * 0.2f),
-            painter = painterResource(id = R.drawable.singin),
+            painter = if (isSystemInDarkTheme()) painterResource(id = R.drawable.darklogo) else painterResource(id = R.drawable.singin),
             contentDescription = "",
         )
         Text(
             text = "Sign In",
             fontFamily = FontFamily(listOf(Font(R.font.poppins_extrabold))),
             fontSize = 32.sp,
-            color = MyBlue
+            color = if (isSystemInDarkTheme()) Color.White else MyBleu
         )
     }
 }
