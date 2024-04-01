@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.projet2cp.data.rules.validator
 import com.example.projet2cp.data.rules.validator.validateUserName
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel: ViewModel() {
    private val TAG = LoginViewModel::class.simpleName
@@ -42,8 +43,12 @@ class LoginViewModel: ViewModel() {
    private fun SignUP() {
       Log.d(TAG, "Inside_printState")
       printState()
+      createUserInFirebase(
+         email = registrationUIState.value.email,
+         password = registrationUIState.value.password ,
+      )
 
-      validateDataWithRules()
+
 
 
    }
@@ -75,5 +80,10 @@ class LoginViewModel: ViewModel() {
    private fun printState(){
       Log.d(TAG, "Inside_printState")
       Log.d(TAG, registrationUIState.value.toString())
+   }
+
+   fun createUserInFirebase(email:String, password:String){
+      FirebaseAuth.getInstance()
+
    }
 }
