@@ -88,10 +88,10 @@ fun SigninScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         SocialMediaLogIn(icon = R.drawable.google, text = "Google", modifier = Modifier.weight(1f)) {}
-                        Spacer(modifier = Modifier.width(screenWidth * 0.03f)) // Increased to 3% of screen width
+                        Spacer(modifier = Modifier.width(screenWidth * 0.03f))
                         SocialMediaLogIn(icon = R.drawable.facebook, text = "Facebook", modifier = Modifier.weight(1f)) {}
                     }
-                    Spacer(modifier = Modifier.height(screenHeight * 0.03f)) // Increased to 3% of screen height
+                    Spacer(modifier = Modifier.height(screenHeight * 0.04f))
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -174,6 +174,6 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
         onButtonClicked ={
             loginViewModel.onEvent(UIEvent.SignUpButtonClicked)
         },
-        isEnabled =
+        isEnabled = loginViewModel.allValidationPassed.value
     )
 }

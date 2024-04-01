@@ -68,6 +68,7 @@ class LoginViewModel: ViewModel() {
          emailError = emailResult.status,
          passwordError = passwordResult.status
       )
+      allValidationPassed.value = userNameResult.status && emailResult.status && passwordResult.status
 
    }
 
