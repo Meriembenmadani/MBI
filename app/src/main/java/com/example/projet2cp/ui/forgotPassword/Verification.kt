@@ -21,14 +21,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.projet2cp.R
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+
 @Composable
-fun Verification() {
+fun Verification(mbiNavController: NavHostController) {
     Surface (
         modifier = Modifier.fillMaxSize()
 

@@ -71,7 +71,7 @@ fun SigninScreen(
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SinginSection(screenWidth, screenHeight)
+                SinginSection(screenWidth, screenHeight, navController = navController)
                 Spacer(modifier = Modifier.height(screenHeight * 0.03f)) // Increased to 3% of screen height
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -140,7 +140,7 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControlle
 }
 
 @Composable
-fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewModel= viewModel()) {
+fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewModel= viewModel(),navController: NavHostController) {
 
     FunTextField(
         label = "User Name",
@@ -173,6 +173,8 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
     ButtonComponent(value = "Sign Up",
         onButtonClicked ={
             loginViewModel.onEvent(UIEvent.SignUpButtonClicked)
+
+
         },
         isEnabled = loginViewModel.allValidationPassed.value
     )

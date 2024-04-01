@@ -30,43 +30,62 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.LoginScreen
 import com.example.projet2cp.screens.SigninScreen
+import com.example.projet2cp.ui.forgotPassword.Verification
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
 import com.example.projet2cp.ui.theme.MyPurple
 
 @Preview
 @Composable
-fun Mbi() {
-    Surface (
-        modifier = Modifier.fillMaxSize()
+fun registration(){
 
-    ){
-
-        val navController = rememberNavController()
-        Scaffold(
-            bottomBar = {
-             BottomBar(navController)
-            },
-
-        ){ it
-
-            NavHost(navController = navController ,
-                startDestination = "Login"  ){
-                composable("Login"){
-                    LoginScreen(navController = navController)
-                }
-                composable("Signin"){
-                    SigninScreen(navController = navController)
-                }
-                composable("forgotPassword"){
-                    ForgotPassword(navController = navController)
-                }
-            }
+    val navController = rememberNavController()
+    NavHost(navController = navController ,
+        startDestination = "Login"  ){
+        composable("Login"){
+            LoginScreen(navController = navController)
+        }
+        composable("Signin"){
+            SigninScreen(navController = navController)
+        }
+        composable("forgotPassword"){
+            ForgotPassword(navController = navController)
+        }
+        composable("MBI"){
+            Mbi(navController = navController)
         }
     }
 }
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun Mbi(navController: NavHostController) {
+
+    Surface (
+        modifier = Modifier.fillMaxSize()
+
+    ){
+        val mbiNavController = rememberNavController()
+
+        Scaffold(
+            bottomBar = {
+             BottomBar(mbiNavController)
+            },
+
+        ){ it
+
+            NavHost(navController = mbiNavController ,
+                startDestination = "verification"  ){
+                composable("verification"){
+                    Verification(mbiNavController = mbiNavController)
+                }
+
+                }
+            }
+
+        }
+    }
+
+@Composable
+fun BottomBar(mbiNavController: NavHostController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,6 +104,7 @@ fun BottomBar(navController: NavHostController) {
                     search  = false
                     course = false
                     infarmations= false
+
                 }) {
                 Icon(
                     painter = painterResource(id = com.example.projet2cp.R.drawable.loginicon),
