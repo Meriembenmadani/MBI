@@ -83,7 +83,20 @@ class LoginViewModel: ViewModel() {
    }
 
    fun createUserInFirebase(email:String, password:String){
-      FirebaseAuth.getInstance()
+      FirebaseAuth
+         .getInstance()
+         .createUserWithEmailAndPassword(email,password)
+         .addOnCompleteListener {
+            Log.d(TAG,"Inside_OnCompleteListener")
+            Log.d(TAG,"is successful ${it.isSuccessful}")
+
+         }
+         .addOnFailureListener {
+            Log.d(TAG,"Inside_OnFailureListener")
+            Log.d(TAG,"Exception = ${it.message}")
+            Log.d(TAG,"Exception = ${it.localizedMessage}")
+         }
+
 
    }
 }
