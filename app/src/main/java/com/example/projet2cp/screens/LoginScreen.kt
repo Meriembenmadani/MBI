@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,8 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
-import com.example.projet2cp.data.LoginViewModel
-import com.example.projet2cp.data.UIEvent
+import com.example.projet2cp.data.SignUpViewModel
+import com.example.projet2cp.data.SignUpUIEvent
 import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
@@ -144,7 +143,7 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
 }
 
 @Composable
-fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel: LoginViewModel = viewModel()) {
+fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel: SignUpViewModel = viewModel()) {
     FunTextField(
         label = "Email",
         onTextSelected = {} ,
@@ -169,7 +168,7 @@ fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControl
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     ButtonComponent(value = "Sign In",
         onButtonClicked ={
-            loginViewModel.onEvent(UIEvent.SignUpButtonClicked,navController)
+            loginViewModel.onEvent(SignUpUIEvent.SignUpButtonClicked,navController)
         }
     )
 }

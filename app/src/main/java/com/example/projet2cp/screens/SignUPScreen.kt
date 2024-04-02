@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
-import com.example.projet2cp.data.LoginViewModel
-import com.example.projet2cp.data.UIEvent
+import com.example.projet2cp.data.SignUpViewModel
+import com.example.projet2cp.data.SignUpUIEvent
 import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
@@ -45,7 +45,7 @@ import com.example.projet2cp.ui.theme.MyPurple
 @Composable
 fun SigninScreen(
     navController: NavHostController,
-    loginViewModel: LoginViewModel= viewModel()
+    loginViewModel: SignUpViewModel= viewModel()
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -150,12 +150,12 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControlle
 }
 
 @Composable
-fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewModel= viewModel(),navController: NavHostController) {
+fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: SignUpViewModel= viewModel(), navController: NavHostController) {
 
     FunTextField(
         label = "User Name",
         onTextSelected = {
-            loginViewModel.onEvent(UIEvent.UserNameChanged(it),navController)
+            loginViewModel.onEvent(SignUpUIEvent.UserNameChanged(it),navController)
         } ,
         modifier = Modifier.fillMaxWidth(),
         errorStatus = loginViewModel.registrationUIState.value.userNameError
@@ -164,7 +164,7 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
     FunTextField(
         label = "Email",
         onTextSelected = {
-            loginViewModel.onEvent(UIEvent.EmailChanged(it),navController)
+            loginViewModel.onEvent(SignUpUIEvent.EmailChanged(it),navController)
         } ,
         modifier = Modifier.fillMaxWidth(),
         errorStatus = loginViewModel.registrationUIState.value.emailError
@@ -173,7 +173,7 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
     FunPassWordField(
         label = "Password",
         onTextSelected = {
-            loginViewModel.onEvent(UIEvent.PasswordChanged(it),navController)
+            loginViewModel.onEvent(SignUpUIEvent.PasswordChanged(it),navController)
         } ,
         modifier = Modifier.fillMaxWidth(),
         errorStatus = loginViewModel.registrationUIState.value.passwordError
@@ -182,7 +182,7 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
 
     ButtonComponent(value = "Sign Up",
         onButtonClicked ={
-            loginViewModel.onEvent(UIEvent.SignUpButtonClicked,navController)
+            loginViewModel.onEvent(SignUpUIEvent.SignUpButtonClicked,navController)
 
 
 

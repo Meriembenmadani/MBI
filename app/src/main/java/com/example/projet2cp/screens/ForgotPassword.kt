@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projet2cp.R
-import com.example.projet2cp.data.LoginViewModel
+import com.example.projet2cp.data.SignUpViewModel
 import com.example.projet2cp.login.FunTextField
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
@@ -37,7 +37,7 @@ import com.example.projet2cp.ui.theme.MyPurple
 
 
 @Composable
-fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewModel = viewModel() ) {
+fun ForgotPassword(navController: NavHostController,loginViewModel: SignUpViewModel = viewModel() ) {
     Surface (
         modifier = Modifier.fillMaxSize(),
         color = if (isSystemInDarkTheme()) Black else Color.White
