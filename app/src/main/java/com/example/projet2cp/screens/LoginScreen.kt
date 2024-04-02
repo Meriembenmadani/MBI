@@ -169,7 +169,7 @@ fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControl
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     ButtonComponent(value = "Sign In",
         onButtonClicked ={
-            loginViewModel.onEvent(UIEvent.SignUpButtonClicked)
+            loginViewModel.onEvent(UIEvent.SignUpButtonClicked,navController)
         }
     )
 }

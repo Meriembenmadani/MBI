@@ -3,6 +3,8 @@ package com.example.projet2cp.data
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.data.rules.validator
 import com.google.firebase.auth.FirebaseAuth
 
@@ -10,7 +12,9 @@ class LoginViewModel: ViewModel() {
    private val TAG = LoginViewModel::class.simpleName
    var registrationUIState = mutableStateOf(RegistrationUIState())
    var allValidationPassed = mutableStateOf(false)
-   fun onEvent(event:UIEvent){
+   var signUpInProgress = mutableStateOf(false)
+
+   fun onEvent(event:UIEvent,navController: NavHostController){
       when(event){
           is UIEvent.UserNameChanged -> {
              registrationUIState.value = registrationUIState.value.copy(
@@ -34,17 +38,19 @@ class LoginViewModel: ViewModel() {
             printState()
          }
          is UIEvent.SignUpButtonClicked ->{
-            signUP()
+            signUP(navController = navController)
          }
       }
    }
 
-   private fun signUP() {
+   private fun signUP(navController: NavHostController) {
+
       Log.d(TAG, "Inside_printState")
       printState()
       createUserInFirebase(
          email = registrationUIState.value.email,
          password = registrationUIState.value.password ,
+         navController = navController
       )
 
 
@@ -81,13 +87,17 @@ class LoginViewModel: ViewModel() {
       Log.d(TAG, registrationUIState.value.toString())
    }
 
-   private fun createUserInFirebase(email:String, password:String){
+   private fun createUserInFirebase(email:String, password:String,navController: NavHostController){
       FirebaseAuth
          .getInstance()
          .createUserWithEmailAndPassword(email,password)
          .addOnCompleteListener {
             Log.d(TAG,"Inside_OnCompleteListener")
             Log.d(TAG,"is successful ${it.isSuccessful}")
+
+            if (it.isSuccessful){
+               navController.navigate("MBI")
+            }
 
          }
          .addOnFailureListener {

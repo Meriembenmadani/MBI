@@ -24,9 +24,12 @@ import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -58,9 +61,9 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 
 
-@Preview
+
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen( navController: NavHostController,) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -193,18 +196,21 @@ private fun CreateImageProject(modifier: Modifier= Modifier) {
 
 @Composable
 fun  Content( screenWidth: Dp, screenHeight: Dp){
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
+
     Box (modifier= Modifier
         .fillMaxSize()
         .fillMaxWidth()
-        .padding(bottom =  screenHeight * 0.06f, top = 5.dp, start = 5.dp,end=5.dp)){
+        .padding(bottom = screenHeight * 0.07f, top = 5.dp, start = 5.dp, end = 5.dp)){
         Surface(modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()
             .fillMaxHeight(),
-            shape = RoundedCornerShape(corner = CornerSize(3.dp)),
-            border =  BorderStroke(width = 1.dp , color = Color.LightGray)
+            shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+            border =  BorderStroke(width = 1.dp , color = uiColor),
+            color = if (isSystemInDarkTheme()) Black else Color.White
         ) {
-            Portfolio(data = listOf("Project 1", "Project 2" , "Project 3"))
+            Portfolio(data = listOf("English A0", "English A1" , "English A2"))
 
         }
 
@@ -223,24 +229,32 @@ fun Portfolio(data: List<String>) {
                     .fillMaxWidth()
                     .height(150.dp),
                 shape = RoundedCornerShape(corner = CornerSize(10.dp)),
+                colors = CardDefaults.cardColors(containerColor =  if (isSystemInDarkTheme()) Color(0xFFB6B6B6) else Color(0xFFE7E0EC)),
+
 
                 ) {
                 Row(modifier= Modifier
-                    .padding(20.dp)
+                    .padding(10.dp)
                     .padding(16.dp)) {
                     CreateImageProject()
                     Column(modifier = Modifier
                         .padding(7.dp)
-                        .align(alignment = Alignment.CenterVertically)) {
-                        Text(text = item , fontWeight = FontWeight.Bold)
-                        Text(text = " a great project" , style = MaterialTheme.typography.bodyMedium)
+                        ) {
+                        Text(text = item,
+                            fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
+                            fontSize = 20.sp,
+                            color = Black)
+                        Text(
+                            text = "You have done a great job",
+                            modifier = Modifier.padding(2.dp),
+                            fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                            fontSize = 11.sp,
+                            color =  Black
+                        )
                     }
-
                 }
-
             }
-
         }
     }
 }
-
+  
