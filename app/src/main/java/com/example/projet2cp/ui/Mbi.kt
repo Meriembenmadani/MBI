@@ -73,13 +73,14 @@ fun Mbi(navController: NavHostController) {
 
         ){ it
 
-            NavHost(navController = mbiNavController ,
+            /*NavHost(navController = mbiNavController ,
                 startDestination = "Profile"  ){
                 composable("Profile"){
                     ProfileScreen(mbiNavController = mbiNavController)
                 }
 
-                }
+                }*/
+            ProfileScreen()
             }
 
         }
