@@ -173,6 +173,7 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: LoginViewMo
     ButtonComponent(value = "Sign Up",
         onButtonClicked ={
             loginViewModel.onEvent(UIEvent.SignUpButtonClicked)
+            navController.navigate("Mbi")
 
 
         },

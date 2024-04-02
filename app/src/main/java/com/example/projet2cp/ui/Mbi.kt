@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.LoginScreen
+import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.screens.SigninScreen
 import com.example.projet2cp.ui.forgotPassword.Verification
 import com.example.projet2cp.ui.theme.MyBleu
@@ -73,9 +74,9 @@ fun Mbi(navController: NavHostController) {
         ){ it
 
             NavHost(navController = mbiNavController ,
-                startDestination = "verification"  ){
-                composable("verification"){
-                    Verification(mbiNavController = mbiNavController)
+                startDestination = "Profile"  ){
+                composable("Profile"){
+                    ProfileScreen(mbiNavController = mbiNavController)
                 }
 
                 }
@@ -94,7 +95,7 @@ fun BottomBar(mbiNavController: NavHostController) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         val uiCol = if (isSystemInDarkTheme()) MyPurple else MyBleu
-        var profile by remember { mutableStateOf(false) }
+        var profile by remember { mutableStateOf(true) }
         var search by remember { mutableStateOf(false) }
         var course by remember { mutableStateOf(false) }
         var infarmations by remember { mutableStateOf(false) }
