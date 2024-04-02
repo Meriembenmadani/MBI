@@ -31,8 +31,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
+import com.example.projet2cp.data.LoginUIEvent
 import com.example.projet2cp.data.SignUpViewModel
 import com.example.projet2cp.data.SignUpUIEvent
+import com.example.projet2cp.data.rules.LoginViewModel
 import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
@@ -143,19 +145,19 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
 }
 
 @Composable
-fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel: SignUpViewModel = viewModel()) {
+fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel:LoginViewModel= viewModel()) {
     FunTextField(
         label = "Email",
         onTextSelected = {} ,
         modifier = Modifier.fillMaxWidth(),
-        errorStatus = loginViewModel.registrationUIState.value.userNameError
+        errorStatus = loginViewModel.loginUIState.value.emailError
         )
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     FunPassWordField(
         label = "Password",
         onTextSelected = {},
         modifier = Modifier.fillMaxWidth(),
-        errorStatus = loginViewModel.registrationUIState.value.passwordError
+        errorStatus = loginViewModel.loginUIState.value.passwordError
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     Text(
@@ -168,8 +170,9 @@ fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControl
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     ButtonComponent(value = "Sign In",
         onButtonClicked ={
-            loginViewModel.onEvent(SignUpUIEvent.SignUpButtonClicked,navController)
-        }
+            loginViewModel.onEvent(LoginUIEvent.ButtonClicked)
+        },
+       isEnabled =  loginViewModel.allValidationPassed.value
     )
 }
 
