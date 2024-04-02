@@ -88,13 +88,14 @@ class LoginViewModel: ViewModel() {
    }
 
    private fun createUserInFirebase(email:String, password:String,navController: NavHostController){
+      signUpInProgress.value = true
       FirebaseAuth
          .getInstance()
          .createUserWithEmailAndPassword(email,password)
          .addOnCompleteListener {
             Log.d(TAG,"Inside_OnCompleteListener")
             Log.d(TAG,"is successful ${it.isSuccessful}")
-
+            signUpInProgress.value = false
             if (it.isSuccessful){
                navController.navigate("MBI")
             }

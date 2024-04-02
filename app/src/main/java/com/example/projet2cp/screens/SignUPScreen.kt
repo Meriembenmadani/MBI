@@ -87,7 +87,7 @@ fun SigninScreen(
                         fontSize = 14.sp,
                         color = Color(0xFF64748B)
                     )
-                    Spacer(modifier = Modifier.height(screenHeight * 0.03f)) // Increased to 3% of screen height
+                    Spacer(modifier = Modifier.height(screenHeight * 0.03f))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
@@ -126,7 +126,9 @@ fun SigninScreen(
             }
         }
     }
-        CircularProgressIndicator()
+
+        if (loginViewModel.signUpInProgress.value){
+        CircularProgressIndicator()}
 
     }
 }

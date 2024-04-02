@@ -63,7 +63,7 @@ import com.example.projet2cp.ui.theme.MyPurple
 
 
 @Composable
-fun ProfileScreen( navController: NavHostController,) {
+fun ProfileScreen( mbiNavController: NavHostController,) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
