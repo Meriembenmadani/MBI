@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,14 +44,19 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController,loginViewModel:LoginViewModel= viewModel()) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
-    Surface(
+
+    Box(
         modifier = Modifier.fillMaxSize(),
-        color = if (isSystemInDarkTheme()) Black else Color.White
-    ) {
+        contentAlignment = Alignment.Center
+    ){
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = if (isSystemInDarkTheme()) Black else Color.White
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxHeight()
@@ -117,6 +123,11 @@ fun LoginScreen(navController: NavHostController) {
             }
         }
     }
+        if (loginViewModel.loginInProgress.value){
+            CircularProgressIndicator()
+        }
+    }
+
 }
 
 @Composable
@@ -148,14 +159,18 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
 fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel:LoginViewModel= viewModel()) {
     FunTextField(
         label = "Email",
-        onTextSelected = {} ,
+        onTextSelected = {
+                         loginViewModel.onEvent(LoginUIEvent.EmailChanged(it),navController)
+        } ,
         modifier = Modifier.fillMaxWidth(),
         errorStatus = loginViewModel.loginUIState.value.emailError
         )
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     FunPassWordField(
         label = "Password",
-        onTextSelected = {},
+        onTextSelected = {
+            loginViewModel.onEvent(LoginUIEvent.PasswordChanged(it),navController)
+        },
         modifier = Modifier.fillMaxWidth(),
         errorStatus = loginViewModel.loginUIState.value.passwordError
     )
@@ -170,7 +185,7 @@ fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControl
     Spacer(modifier = Modifier.height(screenHeight * 0.02f))
     ButtonComponent(value = "Sign In",
         onButtonClicked ={
-            loginViewModel.onEvent(LoginUIEvent.ButtonClicked)
+            loginViewModel.onEvent(LoginUIEvent.ButtonClicked,navController)
         },
        isEnabled =  loginViewModel.allValidationPassed.value
     )

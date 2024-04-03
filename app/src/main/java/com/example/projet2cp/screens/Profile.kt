@@ -47,7 +47,8 @@ import com.example.projet2cp.data.SignUpViewModel
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
-
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -59,6 +60,7 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpVie
     val buttonClickedState = remember {
         mutableStateOf(false)
     }
+     val auth: FirebaseAuth
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,6 +118,8 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpVie
 
 @Composable
 private fun CreateInfo(loginViewModel: SignUpViewModel= viewModel()) {
+
+
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     Column (
         modifier = Modifier.padding(5.dp),

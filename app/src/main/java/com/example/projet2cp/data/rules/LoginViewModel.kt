@@ -3,6 +3,7 @@ package com.example.projet2cp.data.rules
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
 import com.example.projet2cp.data.LoginUIEvent
 import com.google.firebase.auth.FirebaseAuth
 
@@ -12,42 +13,59 @@ class LoginViewModel :ViewModel(){
     var allValidationPassed = mutableStateOf(false)
     var loginInProgress = mutableStateOf(false)
 
-    fun onEvent(event:LoginUIEvent){
+    fun onEvent(event:LoginUIEvent,navController: NavHostController){
         when(event){
 
             is LoginUIEvent.EmailChanged -> {
                 loginUIState.value = loginUIState.value.copy(
                     email = event.email
                 )
+                validateDataWithRules()
 
             }
 
             is LoginUIEvent.PasswordChanged -> {
                 loginUIState.value = loginUIState.value.copy(
-                    email = event.password
+                    password = event.password
                 )
+                validateDataWithRules()
 
             }
 
             is LoginUIEvent.ButtonClicked ->{
-                login()
+                login(navController)
             }
 
 
-            else -> {}
         }
         validateLoginUIDataWithRules()
 
     }
 
     private fun validateLoginUIDataWithRules() {
-        TODO("Not yet implemented")
+
     }
 
-    private fun login() {
+    private fun login(navController: NavHostController) {
+        loginInProgress.value=true
+        val email= loginUIState.value.email
+        val password = loginUIState.value.password
         FirebaseAuth
             .getInstance()
-            .signInWithEmailAndPassword()
+            .signInWithEmailAndPassword(email,password)
+            .addOnCompleteListener {
+                loginInProgress.value=false
+                Log.d(TAG,"Inside_login_success")
+                Log.d(TAG,"is Successful = ${it.isSuccessful}")
+                if(it.isSuccessful){
+                    navController.navigate("MBI")
+                }
+            }
+            .addOnFailureListener {
+                Log.d(TAG,"Inside_OnFailureListener")
+                Log.d(TAG,"Exception = ${it.message}")
+                Log.d(TAG,"Exception = ${it.localizedMessage}")
+            }
 
     }
     private fun validateDataWithRules() {

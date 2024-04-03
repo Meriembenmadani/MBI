@@ -40,7 +40,7 @@ class SignUpViewModel: ViewModel() {
             signUP(navController = navController)
          }
 
-         else -> {}
+
       }
    }
 
@@ -51,6 +51,7 @@ class SignUpViewModel: ViewModel() {
       createUserInFirebase(
          email = registrationUIState.value.email,
          password = registrationUIState.value.password ,
+         userna = registrationUIState.value.userName,
          navController = navController
       )
 
@@ -88,7 +89,7 @@ class SignUpViewModel: ViewModel() {
       Log.d(TAG, registrationUIState.value.toString())
    }
 
-   private fun createUserInFirebase(email:String, password:String,navController: NavHostController){
+   private fun createUserInFirebase(email:String, password:String,userna:String,navController: NavHostController){
       signUpInProgress.value = true
       FirebaseAuth
          .getInstance()
