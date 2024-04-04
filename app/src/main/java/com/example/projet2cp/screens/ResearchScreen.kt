@@ -16,12 +16,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,9 +54,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.Popup
 import com.example.projet2cp.R
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
@@ -67,9 +72,7 @@ fun ResearchScreen() {
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-    val buttonClickedState = remember {
-        mutableStateOf(false)
-    }
+
 
     Surface(
         modifier = Modifier
@@ -96,7 +99,12 @@ fun ResearchScreen() {
 fun ResearchSection(screenHeight: Dp,screenWidth:Dp) {
     val bgColor =  if (isSystemInDarkTheme()) Black else Color.White
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
+    val languageState = remember { mutableStateOf("Language") }
+    val levelState = remember { mutableStateOf("Level") }
     val buttonClickedState = remember {
+        mutableStateOf(false)
+    }
+    val levelButton = remember {
         mutableStateOf(false)
     }
 
@@ -106,12 +114,12 @@ fun ResearchSection(screenHeight: Dp,screenWidth:Dp) {
             .fillMaxHeight()
             .fillMaxSize(),
         color = bgColor,
-        shape = (RoundedCornerShape(50.dp))
+        shape = (RoundedCornerShape(topEnd = 50.dp, topStart = 50.dp))
     ) {
         Column(modifier = Modifier
             .fillMaxHeight()
             .padding(
-                top = screenHeight * 0.05f,
+                top = screenHeight * 0.09f,
                 start = screenWidth * 0.05f,
                 end = screenWidth * 0.05f,
             )
@@ -125,25 +133,45 @@ fun ResearchSection(screenHeight: Dp,screenWidth:Dp) {
                 fontSize = 18.sp,
                 color = uiColor
             )
-            TextFieldR(
-                modifier = Modifier.fillMaxWidth(),
-                "Language",
-                onButtonClick = {buttonClickedState.value= ! buttonClickedState.value}
-            )
+            Choose(uiColor, bgColor, languageState, buttonClickedState)
 
             if (buttonClickedState.value){
+
                 Box(
                     contentAlignment = Alignment.TopCenter
                 ) {
-                    Dialog(
-                        onDismissRequest = {
-                            buttonClickedState.value=false
-                        }) {
-                       Languages(screenHeight)
+                    Popup(
+                        alignment = Alignment.TopStart,
+                        offset = IntOffset(0, 50),
+                        onDismissRequest = { buttonClickedState.value = false }
+                    ) {
+                        Languages(screenHeight, language = languageState, buttonClickedState = buttonClickedState)
+                    }
+                        }
+
+                }
+
+             else{
+                Box {}
+            }
+            Choose(uiColor = uiColor, bgColor = bgColor, languageState = levelState, buttonClickedState =levelButton )
+            if (levelButton.value){
+
+                Box(
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    Popup(
+                        alignment = Alignment.TopStart,
+                        offset = IntOffset(0, 50),
+                        onDismissRequest = {levelButton.value = false }
+                    ) {
+                        Levels(screenHeight, language = levelState, buttonClickedState = levelButton)
                     }
                 }
 
-            } else{
+            }
+
+            else{
                 Box {}
             }
         }
@@ -152,29 +180,104 @@ fun ResearchSection(screenHeight: Dp,screenWidth:Dp) {
 
 }
 
-@Preview
 @Composable
-fun Languages(screenHeight:Dp ) {
-    val buttonClickedState = remember {
-        mutableStateOf(false)
+private fun Choose(
+    uiColor: Color,
+    bgColor: Color,
+    languageState: MutableState<String>,
+    buttonClickedState: MutableState<Boolean>
+) {
+    Card(
+        modifier = Modifier.run {
+            padding(
+                top = 20.dp,
+                end = 13.dp,
+                start = 13.dp
+            )
+                .fillMaxWidth()
+                .height(43.dp)
+                .border(
+                    width = 2.dp,
+                    color = uiColor,
+                    shape = RoundedCornerShape(12.dp)
+                )
+        },
+        shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = bgColor
+        ),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 10.dp, end = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+
+        ) {
+            Text(
+                text = languageState.value,
+                fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                color = if (isSystemInDarkTheme()) Color.White else Color(0xFF475569),
+            )
+            IconButton(onClick = { buttonClickedState.value = !buttonClickedState.value }) {
+                Image(
+                    painter = if (isSystemInDarkTheme()) painterResource(id = R.drawable.rd) else painterResource(
+                        id = R.drawable.r
+                    ),
+                    contentDescription = "Icon Description"
+                )
+            }
+
+        }
+
     }
+}
+
+
+@Composable
+fun Languages(screenHeight:Dp,language:MutableState<String>,buttonClickedState:MutableState<Boolean>) {
+
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-  Column (){
+  Column (
+      modifier = Modifier.padding(top=1.dp),
+
+  ){
 
 
     Box (modifier= Modifier
-        .fillMaxSize()
-        .fillMaxWidth()
+        .height(300.dp)
+        .width(240.dp)
         .padding(bottom = screenHeight * 0.07f, top = 5.dp, start = 5.dp, end = 5.dp)){
         Surface(modifier = Modifier
-            .padding(10.dp)
+            .padding(end = 10.dp, start =10.dp )
             .fillMaxWidth()
             .fillMaxHeight(),
             shape = RoundedCornerShape(corner = CornerSize(12.dp)),
             border =  BorderStroke(width = 1.dp , color = uiColor),
             color = if (isSystemInDarkTheme()) Black else Color.White
         ) {
-            Language(data = listOf("English A0", "English A1" , "English A2"))
+            Language(data = listOf(
+                "English",
+                "French" ,
+                "Russian",
+                "German",
+                "Spanish",
+                "Chinese",
+                "Korean",
+                "Italian",
+                "Japanese"
+            ), flag = listOf(
+                R.drawable.english,
+                R.drawable.french,
+                R.drawable.russian,
+                R.drawable.german,
+                R.drawable.spanish,
+                R.drawable.chinese,
+                R.drawable.korean,
+                R.drawable.italian,
+                R.drawable.japanese
+            ), language,buttonClickedState )
 
         }
 
@@ -183,40 +286,57 @@ fun Languages(screenHeight:Dp ) {
 
 }
 
-@Preview
+
 @Composable
-fun Language(data: List<String>) {
+fun Language(data: List<String> , flag: List<Int>,language: MutableState<String>,buttonClickedState:MutableState<Boolean>)  {
     LazyColumn {
+        var i = -1
         items(data) { item ->
+            i++
 
             Card(
                 modifier = Modifier
-                    .padding(13.dp)
-                    .fillMaxWidth()
-                    .height(150.dp),
+                    .padding(
+                        top = 10.dp,
+                        end = 13.dp,
+                        start = 13.dp
+                    )
+                    .width(200.dp)
+                    .height(43.dp),
                 shape = RoundedCornerShape(corner = CornerSize(10.dp)),
-                colors = CardDefaults.cardColors(containerColor =  if (isSystemInDarkTheme()) Color(0xFFB6B6B6) else Color(0xFFE7E0EC)),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isSystemInDarkTheme()) Color(
+                        0xFFB6B6B6
+                    ) else Color(0xFFE7E0EC)
+                ),
 
 
                 ) {
-                Row(modifier= Modifier
-                    .padding(10.dp)
-                    .padding(16.dp)) {
-                    CreateImageProject()
-                    Column(modifier = Modifier
-                        .padding(7.dp)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+
                     ) {
-                        Text(text = item,
+                        CreateImageFlag(flag.get(i))
+                        Spacer(modifier = Modifier.width(10.dp))
+
+                        Text(
+                            text = item,
                             fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
                             fontSize = 20.sp,
-                            color = Black)
-                        Text(
-                            text = "You have done a great job",
-                            modifier = Modifier.padding(2.dp),
-                            fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
-                            fontSize = 11.sp,
-                            color =  Black
+                            color = Black,
+                            modifier = Modifier.clickable {
+                                language.value = item
+                                buttonClickedState.value = false
+                            }
                         )
+
+
                     }
                 }
             }
@@ -224,102 +344,30 @@ fun Language(data: List<String>) {
     }
 }
 
+
 @Composable
-private fun CreateImageFlag(modifier: Modifier= Modifier) {
+private fun CreateImageFlag( imageId:Int) {
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
 
     Surface(
         modifier = Modifier
-            .size(90.dp)
+            .size(40.dp)
             .padding(2.dp),
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(0.5.dp, Color.LightGray),
-        shadowElevation = 4.dp,
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+
+        color = Color.Transparent
 
 
     ) {
         Image(
-            painter = painterResource(id = R.drawable.certificate), contentDescription = "profile image",
-            modifier = modifier.size(5.dp),
+            painter = painterResource(id = imageId), contentDescription = "profile image",
+            modifier = Modifier.size(5.dp),
             contentScale = ContentScale.Crop
         )
     }
 }
 
 
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun TextFieldR(
-       modifier: Modifier = Modifier,
-        label: String,
-       onButtonClick: () -> Unit
-
-    ) {
-
-        val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-        val password = remember { mutableStateOf("") }
-        val localFocusManager = LocalFocusManager.current
-
-
-
-           androidx.compose.material3.TextField(
-            modifier = modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .border(
-                    width = 2.dp,
-                    color = uiColor,
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions {
-                localFocusManager.clearFocus()
-            },
-            shape = RectangleShape,
-            maxLines = 1,
-
-            singleLine = true,
-            value = password.value,
-            onValueChange = {
-                password.value = it
-
-            },
-
-            label = {
-                Text(
-                    text = label,
-                    fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
-                    color = if (isSystemInDarkTheme()) Color.White else Color(0xFF475569),
-
-                    )
-            },
-
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                errorBorderColor = Color.Transparent,
-                cursorColor = uiColor,
-                errorTextColor = Color.Red,
-                focusedTextColor = if (isSystemInDarkTheme()) Color.White else MyGray,
-                unfocusedTextColor = if (isSystemInDarkTheme()) Color.White else MyGray,
-
-
-                ),
-            trailingIcon = {
-                IconButton(onClick = { onButtonClick }) {
-                    Image(
-                        painter = if (isSystemInDarkTheme()) painterResource(id = R.drawable.rd) else painterResource(id = R.drawable.r),
-                        contentDescription = "Icon Description"
-                    )
-                }
-            }
-
-        )
-    }
 
 
 @Composable
@@ -356,3 +404,96 @@ fun TopSectionR(screenHeight: Dp, screenWidth:Dp) {
         )
     }
 }
+
+@Composable
+fun Levels(screenHeight:Dp,language:MutableState<String>,buttonClickedState:MutableState<Boolean>) {
+
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
+    Column (
+        modifier = Modifier.padding(top=1.dp),
+
+        ){
+
+
+        Box (modifier= Modifier
+            .height(300.dp)
+            .width(240.dp)
+            .padding(bottom = screenHeight * 0.07f, top = 5.dp, start = 5.dp, end = 5.dp)){
+            Surface(modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth()
+                .fillMaxHeight(),
+                shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+                border =  BorderStroke(width = 1.dp , color = uiColor),
+                color = if (isSystemInDarkTheme()) Black else Color.White
+            ) {
+                Levele(data = listOf(
+                    "A0",
+                    "A1" ,
+                    "A2",
+                    "B1",
+                    "B2",
+                    "C1",
+                    "C2",
+
+                ), language,buttonClickedState )
+
+            }
+
+        }
+    }
+
+}
+
+@Composable
+fun Levele(data: List<String> , language: MutableState<String>,buttonClickedState:MutableState<Boolean>)  {
+    LazyColumn {
+
+        items(data) { item ->
+
+
+            Card(
+                modifier = Modifier
+                    .padding(
+                        top = 10.dp,
+                        end = 13.dp,
+                        start = 13.dp
+                    )
+                    .width(200.dp)
+                    .height(43.dp),
+                shape = RoundedCornerShape(corner = CornerSize(10.dp)),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isSystemInDarkTheme()) Color(
+                        0xFFB6B6B6
+                    ) else Color(0xFFE7E0EC)
+                ),
+
+
+                ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+
+
+
+                        Text(
+                            text = item,
+                            fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
+                            fontSize = 20.sp,
+                            color = Black,
+                            modifier = Modifier.clickable {
+                                language.value = item
+                                buttonClickedState.value = false
+                            }
+                        )
+
+
+
+                }
+            }
+        }
+    }
+}
+
