@@ -1,5 +1,6 @@
 package com.example.projet2cp.screens
 
+import NavigationViewModel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -24,6 +25,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -59,15 +62,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.Popup
+import androidx.navigation.NavHostController
 import com.example.projet2cp.R
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
 import com.example.projet2cp.ui.theme.MyPurple
 
-@Preview
+
 @Composable
-fun ResearchScreen() {
+fun ResearchScreen(mbiNavController: NavHostController,viewModel: NavigationViewModel) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -90,13 +94,13 @@ fun ResearchScreen() {
             verticalArrangement = Arrangement.Top,
         ) {
             TopSectionR(screenHeight,screenWidth)
-            ResearchSection(screenHeight,screenWidth)
+            ResearchSection(screenHeight,screenWidth,mbiNavController,viewModel)
         }
     }
 }
 
 @Composable
-fun ResearchSection(screenHeight: Dp,screenWidth:Dp) {
+fun ResearchSection(screenHeight: Dp,screenWidth:Dp,navController: NavHostController,viewModel: NavigationViewModel) {
     val bgColor =  if (isSystemInDarkTheme()) Black else Color.White
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     val languageState = remember { mutableStateOf("Language") }
@@ -173,6 +177,36 @@ fun ResearchSection(screenHeight: Dp,screenWidth:Dp) {
 
             else{
                 Box {}
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .run {
+                    padding(
+
+                        end = 13.dp,
+                        start = 13.dp
+                    )},
+                onClick = {
+                    viewModel.selectedLanguage = languageState.value
+                    viewModel.selectedLevel = levelState.value
+                    viewModel.navigateToBuyScreen.value = true
+                    navController.navigate("buyScreen")
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = uiColor,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Text(
+                    text = "Research",
+                    fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
+                    fontSize = 14.sp
+                )
+
             }
         }
 
@@ -471,6 +505,7 @@ fun Levele(data: List<String> , language: MutableState<String>,buttonClickedStat
 
                 ) {
                 Column(
+                    modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -488,8 +523,6 @@ fun Levele(data: List<String> , language: MutableState<String>,buttonClickedStat
                                 buttonClickedState.value = false
                             }
                         )
-
-
 
                 }
             }

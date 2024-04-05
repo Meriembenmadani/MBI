@@ -77,7 +77,9 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation ( "com.google.firebase:firebase-auth:latest_version")
     implementation ("com.google.firebase:firebase-auth:22.3.1")
-
+    implementation ("androidx.compose.ui:ui:1.2.0-alpha05")
+    implementation( "androidx.compose.ui:ui-tooling:1.2.0-alpha05")
+    implementation ("androidx.compose.material:material:1.2.0-alpha05")
 
 
 }

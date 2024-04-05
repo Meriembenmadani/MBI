@@ -1,5 +1,6 @@
 package com.example.projet2cp.ui
 
+import NavigationViewModel
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,18 +21,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.LightGray
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.projet2cp.screens.BuyScreen
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.LoginScreen
 import com.example.projet2cp.screens.ProfileScreen
+import com.example.projet2cp.screens.ResearchScreen
 import com.example.projet2cp.screens.SigninScreen
 import com.example.projet2cp.ui.forgotPassword.Verification
+import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
 import com.example.projet2cp.ui.theme.MyPurple
@@ -59,7 +65,8 @@ fun registration(){
 }
 @Composable
 fun Mbi(navController: NavHostController) {
-
+    val viewModel: NavigationViewModel = viewModel()
+    val uiColor = if (isSystemInDarkTheme()) Black else White
     Surface (
         modifier = Modifier.fillMaxSize()
 
@@ -70,6 +77,7 @@ fun Mbi(navController: NavHostController) {
             bottomBar = {
              BottomBar(mbiNavController)
             },
+            containerColor = uiColor
 
         ){ it
 
@@ -77,6 +85,12 @@ fun Mbi(navController: NavHostController) {
                 startDestination = "Profile"  ){
                 composable("Profile"){
                     ProfileScreen(mbiNavController = mbiNavController)
+                }
+                composable("Research"){
+                    ResearchScreen(mbiNavController = mbiNavController, viewModel )
+                }
+                composable("buyScreen") {
+                    BuyScreen(viewModel)
                 }
 
                 }
@@ -120,6 +134,7 @@ fun BottomBar(mbiNavController: NavHostController) {
                 search  = true
                 course = false
                 infarmations= false
+                mbiNavController.navigate("Research")
             }) {
                 Icon(
                     painter = painterResource(id=  com.example.projet2cp.R.drawable.search),
