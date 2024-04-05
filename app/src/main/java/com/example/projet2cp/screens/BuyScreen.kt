@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.R
-import com.example.projet2cp.data.Course
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
@@ -297,7 +296,14 @@ fun BuySection(screenHeight: Dp, screenWidth: Dp) {
 
 }
 }
-
+data class Course(
+    val name : String ,
+    val date : String,
+    val img : Int,
+    val lessons : Int,
+    val places:Int,
+    val price : Float
+)
 
 
 
