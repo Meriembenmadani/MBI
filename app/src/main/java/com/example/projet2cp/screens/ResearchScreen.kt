@@ -108,6 +108,7 @@ fun ResearchSection(screenHeight: Dp,screenWidth:Dp,navController: NavHostContro
     val buttonClickedState = remember {
         mutableStateOf(false)
     }
+    val isButtonEnabled = languageState.value != "Language" && levelState.value != "Level"
     val levelButton = remember {
         mutableStateOf(false)
     }
@@ -200,6 +201,7 @@ fun ResearchSection(screenHeight: Dp,screenWidth:Dp,navController: NavHostContro
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(12.dp),
+                enabled = isButtonEnabled
             ) {
                 Text(
                     text = "Research",
@@ -368,6 +370,7 @@ fun Language(data: List<String> , flag: List<Int>,language: MutableState<String>
                                 language.value = item
                                 buttonClickedState.value = false
                             }
+
                         )
 
 
@@ -522,6 +525,7 @@ fun Levele(data: List<String> , language: MutableState<String>,buttonClickedStat
                                 language.value = item
                                 buttonClickedState.value = false
                             }
+
                         )
 
                 }

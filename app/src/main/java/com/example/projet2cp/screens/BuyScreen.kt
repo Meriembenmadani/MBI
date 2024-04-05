@@ -111,9 +111,10 @@ fun CourseCard(course: Course, index: Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(7.dp)
-            .background(if (isSystemInDarkTheme()) Color(0xff827A7A) else Color(0xffF2F2F2))
-            .clip(RoundedCornerShape(10.dp)),
+            .padding(7.dp, bottom = 20.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (isSystemInDarkTheme()) Color(0xff827A7A) else Color(0xffF2F2F2)),
+
         contentAlignment = Alignment.Center
 
     ){
@@ -217,7 +218,7 @@ fun CourseCard(course: Course, index: Int) {
                 color = if (isSystemInDarkTheme()) Color.White else Color.Gray,
                 thickness = 1.dp
             )
-          Column(modifier = Modifier.fillMaxWidth().height(15.dp),
+          Column(modifier = Modifier.fillMaxWidth().height(30.dp),
               horizontalAlignment = Alignment.CenterHorizontally) {
 
               Button(
@@ -235,7 +236,7 @@ fun CourseCard(course: Course, index: Int) {
                   Text(
                       text = "Buy",
                       fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
-                      fontSize = 7.95.sp,
+                      fontSize = 10.sp,
                       color = Color.White
                   )
 
