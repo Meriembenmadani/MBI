@@ -12,6 +12,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.rememberNavController
+import com.example.projet2cp.screens.PaymentScreen
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.ui.Mbi
 import com.example.projet2cp.ui.registration

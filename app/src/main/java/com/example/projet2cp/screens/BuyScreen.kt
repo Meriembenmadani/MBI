@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.R
 import com.example.projet2cp.data.Course
@@ -52,7 +53,7 @@ import com.example.projet2cp.ui.theme.MyGray
 import com.example.projet2cp.ui.theme.MyPurple
 
 @Composable
-fun BuyScreen(viewModel: NavigationViewModel) {
+fun BuyScreen(mbiNavController: NavHostController, viewModel: NavigationViewModel) {
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -97,7 +98,7 @@ fun BuyScreen(viewModel: NavigationViewModel) {
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
-            BuySection(screenHeight,screenWidth)
+            BuySection(screenHeight,screenWidth, mbiNavController )
         }
 
     }
@@ -105,7 +106,7 @@ fun BuyScreen(viewModel: NavigationViewModel) {
 
 
 @Composable
-fun CourseCard(course: Course, index: Int) {
+fun CourseCard(course: Course, index: Int,navController:NavHostController) {
     val alignment = if (index % 2==0) Alignment.CenterStart else Alignment.CenterEnd
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     Box(
@@ -224,7 +225,7 @@ fun CourseCard(course: Course, index: Int) {
               Button(
 
                   onClick = {
-
+                      navController.navigate("PaymentScreen")
 
                   },
                   colors = ButtonDefaults.buttonColors(
@@ -262,7 +263,7 @@ fun getCoursesList():  List<Course> {
 
 
 @Composable
-fun BuySection(screenHeight: Dp, screenWidth: Dp) {
+fun BuySection(screenHeight: Dp, screenWidth: Dp,mbiNavController: NavHostController) {
     val bgColor =  if (isSystemInDarkTheme()) Black else Color.White
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     val listOfCourses = getCoursesList()
@@ -290,7 +291,7 @@ fun BuySection(screenHeight: Dp, screenWidth: Dp) {
         ) {
             LazyVerticalGrid(modifier = Modifier.fillMaxWidth(),columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.SpaceBetween){
                 itemsIndexed(items =listOfCourses) {index:Int,course: Course ->
-               CourseCard(course =course , index = index )
+               CourseCard(course =course , index = index , navController = mbiNavController)
             }
         }
     }

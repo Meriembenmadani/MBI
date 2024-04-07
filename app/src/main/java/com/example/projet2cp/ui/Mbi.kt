@@ -33,9 +33,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.BuyScreen
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.LoginScreen
+import com.example.projet2cp.screens.PaymentScreen
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.screens.ResearchScreen
 import com.example.projet2cp.screens.SigninScreen
+import com.example.projet2cp.screens.SuccessfulPaymentScreen
 import com.example.projet2cp.ui.forgotPassword.Verification
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
@@ -90,7 +92,13 @@ fun Mbi(navController: NavHostController) {
                     ResearchScreen(mbiNavController = mbiNavController, viewModel )
                 }
                 composable("buyScreen") {
-                    BuyScreen(viewModel)
+                    BuyScreen(mbiNavController,viewModel)
+                }
+                composable("PaymentScreen") {
+                   PaymentScreen(navController = mbiNavController)
+                }
+                composable("SuccessfulPaymentScreen") {
+                    SuccessfulPaymentScreen(mbiNavController = mbiNavController)
                 }
 
                 }
