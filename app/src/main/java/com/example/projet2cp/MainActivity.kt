@@ -15,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.ui.Mbi
 import com.example.projet2cp.ui.registration
-import com.jetpack.paymentcarddetail.AddPaymentCard
 import java.lang.reflect.Modifier
 
 class MainActivity : ComponentActivity() {
@@ -24,23 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-                Surface(color = Color.White) {
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text(
-                                        text = "Payment Card Details",
-                                        modifier = androidx.compose.ui.Modifier.fillMaxWidth(),
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            )
-                        }
-                    ) {it
-                        AddPaymentCard()
-                    }
-                }
+          registration()
 
         }
     }
