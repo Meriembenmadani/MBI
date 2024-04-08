@@ -33,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.BuyScreen
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.LoginScreen
+import com.example.projet2cp.screens.MyCoursesScreen
 import com.example.projet2cp.screens.PaymentScreen
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.screens.ResearchScreen
@@ -95,10 +96,13 @@ fun Mbi(navController: NavHostController) {
                     BuyScreen(mbiNavController,viewModel)
                 }
                 composable("PaymentScreen") {
-                   PaymentScreen(navController = mbiNavController)
+                   PaymentScreen(navController = mbiNavController,viewModel)
                 }
                 composable("SuccessfulPaymentScreen") {
                     SuccessfulPaymentScreen(mbiNavController = mbiNavController)
+                }
+                composable("MyCoursesScreen"){
+                    MyCoursesScreen(navController = mbiNavController, viewModel = viewModel)
                 }
 
                 }
@@ -156,6 +160,8 @@ fun BottomBar(mbiNavController: NavHostController) {
                 search  = false
                 course = true
                 infarmations= false
+                mbiNavController.navigate("MyCoursesScreen")
+
             }) {
                 Icon(
                     painter = painterResource(id=  com.example.projet2cp.R.drawable.cours),

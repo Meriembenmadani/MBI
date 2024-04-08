@@ -98,7 +98,7 @@ fun BuyScreen(mbiNavController: NavHostController, viewModel: NavigationViewMode
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
-            BuySection(screenHeight,screenWidth, mbiNavController )
+            BuySection(screenHeight,screenWidth, mbiNavController , viewModel)
         }
 
     }
@@ -106,7 +106,7 @@ fun BuyScreen(mbiNavController: NavHostController, viewModel: NavigationViewMode
 
 
 @Composable
-fun CourseCard(course: Course, index: Int,navController:NavHostController) {
+fun CourseCard(course: Course, index: Int,navController:NavHostController,viewModel: NavigationViewModel) {
     val alignment = if (index % 2==0) Alignment.CenterStart else Alignment.CenterEnd
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     Box(
@@ -131,7 +131,7 @@ fun CourseCard(course: Course, index: Int,navController:NavHostController) {
 
                 Image(
                     painter = painterResource(course.img),
-                    contentDescription = "plant img",
+                    contentDescription = "",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
@@ -226,6 +226,7 @@ fun CourseCard(course: Course, index: Int,navController:NavHostController) {
 
                   onClick = {
                       navController.navigate("PaymentScreen")
+                      viewModel.purchasedCourses.add(course)
 
                   },
                   colors = ButtonDefaults.buttonColors(
@@ -263,7 +264,7 @@ fun getCoursesList():  List<Course> {
 
 
 @Composable
-fun BuySection(screenHeight: Dp, screenWidth: Dp,mbiNavController: NavHostController) {
+fun BuySection(screenHeight: Dp, screenWidth: Dp,mbiNavController: NavHostController,viewModel: NavigationViewModel) {
     val bgColor =  if (isSystemInDarkTheme()) Black else Color.White
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     val listOfCourses = getCoursesList()
@@ -291,7 +292,7 @@ fun BuySection(screenHeight: Dp, screenWidth: Dp,mbiNavController: NavHostContro
         ) {
             LazyVerticalGrid(modifier = Modifier.fillMaxWidth(),columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.SpaceBetween){
                 itemsIndexed(items =listOfCourses) {index:Int,course: Course ->
-               CourseCard(course =course , index = index , navController = mbiNavController)
+               CourseCard(course =course , index = index , navController = mbiNavController, viewModel = viewModel)
             }
         }
     }

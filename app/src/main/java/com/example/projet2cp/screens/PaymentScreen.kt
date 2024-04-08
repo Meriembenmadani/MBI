@@ -1,5 +1,6 @@
 package com.example.projet2cp.screens
 
+import NavigationViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -38,7 +39,7 @@ import com.example.projet2cp.ui.theme.MyPurple
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PaymentScreen( navController: NavHostController) {
+fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewModel) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -298,6 +299,7 @@ fun PaymentScreen( navController: NavHostController) {
                         .height(40.dp),
                     onClick = {
                         navController.navigate("SuccessfulPaymentScreen")
+                        viewModel.addCourse.value = true
 
                     },
                     colors = ButtonDefaults.buttonColors(
