@@ -226,7 +226,8 @@ fun CourseCard(course: Course, index: Int,navController:NavHostController,viewMo
 
                   onClick = {
                       navController.navigate("PaymentScreen")
-                      viewModel.purchasedCourses.add(course)
+
+                      viewModel.addCourse = course
 
                   },
                   colors = ButtonDefaults.buttonColors(

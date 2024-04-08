@@ -1,7 +1,6 @@
 package com.example.projet2cp.screens
 
 import NavigationViewModel
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +45,7 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 
 
+
 @Composable
 fun MyCoursesScreen(navController: NavHostController,viewModel: NavigationViewModel) {
     val configuration = LocalConfiguration.current
@@ -63,26 +63,34 @@ fun MyCoursesScreen(navController: NavHostController,viewModel: NavigationViewMo
             ),
         color = uiColor
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(
-                    start = screenWidth * 0.05f,
-                    end = screenWidth * 0.05f,
-                    top = screenHeight * 0.05f,
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
+        Column( modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .fillMaxSize()
         ) {
-            Text(
-                text = "My Courses",
-                fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
-                fontSize = 32.24.sp,
-                color = Color.White
-            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = screenWidth * 0.05f,
+                        end = screenWidth * 0.05f,
+                        top = screenHeight * 0.05f,
+                    ),
+                //horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
+            ) {
+                Text(
+                    text = "My Courses",
+                    fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
+                    fontSize = 32.24.sp,
+                    color = Color.White
+                )
+            }
             Spacer(modifier = Modifier.height(20.dp))
 
             CoursesSection(screenHeight = screenHeight, screenWidth = screenWidth,viewModel)
+
 
         }
     }
@@ -94,14 +102,12 @@ fun MyCoursesScreen(navController: NavHostController,viewModel: NavigationViewMo
 @Composable
 fun CoursesSection(screenHeight: Dp, screenWidth: Dp,viewModel: NavigationViewModel) {
     val bgColor =  if (isSystemInDarkTheme()) Black else Color.White
-    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-    var courseslist = listOf(        Course("Grammar" , "20/02/2024", R.drawable.gramma, 20, 12, 40000.0f))
-    if (viewModel.addCourse.value){courseslist+viewModel.purchasedCourses}
+
 
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.8f)
+            .fillMaxHeight()
             .fillMaxSize()
 
         ,
@@ -127,10 +133,11 @@ fun CoursesSection(screenHeight: Dp, screenWidth: Dp,viewModel: NavigationViewMo
                     .padding(0.dp)
                     .fillMaxWidth()
                     .fillMaxHeight(),
+                    color = bgColor,
                     shape = RectangleShape,
 
                 ) {
-                    Course(data = courseslist)
+                    Course(data = viewModel.purchasedCourses,viewModel)
 
                 }
 
@@ -141,19 +148,18 @@ fun CoursesSection(screenHeight: Dp, screenWidth: Dp,viewModel: NavigationViewMo
 }
 
 @Composable
-fun Course(data:  List<Course> ) {
+fun Course(data:  List<Course>,viewModel: NavigationViewModel ) {
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-    var i = -1
     LazyColumn {
         items(data) { item ->
 
             Card(
                 modifier = Modifier
-                    .padding(13.dp)
                     .fillMaxWidth()
-                    .height(100.dp),
+                    .height(100.dp)
+                    .padding(bottom = 13.dp),
                 shape = RoundedCornerShape(corner = CornerSize(10.dp)),
-                colors = CardDefaults.cardColors(containerColor =  if (isSystemInDarkTheme()) Color(0xFFB6B6B6) else Color(0xFFE7E0EC)),
+                colors = CardDefaults.cardColors(containerColor =   Color(0x59808080)),
 
 
                 ) {
@@ -164,7 +170,7 @@ fun Course(data:  List<Course> ) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                            Text(text = item.name,
+                            Text(text = "${item.name} ${viewModel.selectedLanguage} ${viewModel.selectedLevel} Classe",
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
                                 fontSize = 12.5.sp,
                                 color = uiColor

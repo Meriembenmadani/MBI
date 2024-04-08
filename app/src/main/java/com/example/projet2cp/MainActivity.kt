@@ -15,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.PaymentScreen
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.ui.Mbi
-import com.example.projet2cp.ui.registration
+import com.example.projet2cp.ui.Registration
 import java.lang.reflect.Modifier
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-          registration()
+         Mbi()
 
         }
     }

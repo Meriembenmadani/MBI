@@ -65,7 +65,8 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpVie
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(bottom = 10.dp),
         color = if (isSystemInDarkTheme()) Black else Color.White
 
     ) {
@@ -195,7 +196,7 @@ fun  Content( screenWidth: Dp, screenHeight: Dp){
         .fillMaxWidth()
         .padding(bottom = screenHeight * 0.07f, top = 5.dp, start = 5.dp, end = 5.dp)){
         Surface(modifier = Modifier
-            .padding(10.dp)
+            .padding(0.dp)
             .fillMaxWidth()
             .fillMaxHeight(),
             shape = RoundedCornerShape(corner = CornerSize(12.dp)),
@@ -217,17 +218,16 @@ fun Portfolio(data: List<String>) {
 
             Card(
                 modifier = Modifier
-                    .padding(13.dp)
+                    .padding(end = 13.dp, bottom = 6.dp,top=6.dp, start = 13.dp)
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(100.dp),
                 shape = RoundedCornerShape(corner = CornerSize(10.dp)),
                 colors = CardDefaults.cardColors(containerColor =  if (isSystemInDarkTheme()) Color(0xFFB6B6B6) else Color(0xFFE7E0EC)),
 
 
                 ) {
                 Row(modifier= Modifier
-                    .padding(10.dp)
-                    .padding(16.dp)) {
+                    .padding(6.dp, bottom = 0.dp) ){
                     CreateImageProject()
                     Column(modifier = Modifier
                         .padding(7.dp)

@@ -1,8 +1,15 @@
 package com.example.projet2cp.screens
 
 import NavigationViewModel
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -44,28 +52,31 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-    val buttonClickedState = remember {
-        mutableStateOf(false)
-    }
-    val expiryDatePattern = "^(0[1-9]|1[0-2])\\/([0-9]{2})$".toRegex()
+    val isCardFlipped = remember { mutableStateOf(false) }
     var expiryError by remember { mutableStateOf(false) }
 
 
     val textValue = remember { mutableStateOf("") }
     val cvc = remember { mutableStateOf("") }
-    var isCvcEntered :Boolean = cvc.value.length in 1..1
+
+
 
 
     val cardNumber = remember { mutableStateOf("XXXXXXXXXXXXXXXX") }
     val cardHolder = remember { mutableStateOf("") }
     val expiry = remember { mutableStateOf("") }
+    val rotation by animateFloatAsState(
+        targetValue = if (isCardFlipped.value) 180f else 0f,
+        animationSpec = tween(durationMillis = 100, easing = LinearEasing),
+        label = ""
+    )
 
     var isButtonEnabled by remember { mutableStateOf(false) }
     fun validateInputs() {
-        isButtonEnabled = cardNumber.value.length >= 16 &&
+        isButtonEnabled = cardNumber.value.isNotEmpty()&&
                 cardHolder.value.isNotEmpty() &&
-                isValidExpiryDate(expiry.value) &&
-                isCvcEntered
+                expiry.value.isNotEmpty() &&
+                cvc.value.isNotEmpty()
     }
     LaunchedEffect(cardNumber.value, cardHolder.value, expiry.value, cvc.value) {
         validateInputs()
@@ -93,13 +104,15 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(206.dp),
+                    .height(206.dp)
+                    .graphicsLayer(rotationY = rotation)
+                    .clickable { isCardFlipped.value = !isCardFlipped.value },
                 shape = RoundedCornerShape(26.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = if (textValue.value.length >= 4) MyBleu else MyGray
                 )
             ) {
-                if (!isCvcEntered) {
+                if (!isCardFlipped.value) {
                     CardFont(
                         cardNumber = cardNumber.value,
                         cardHolder = cardHolder.value,
@@ -263,8 +276,10 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
 
                         value = cvc.value,
                         onValueChange = {
-                            if(cvc.value.length <=1){
-                                        cvc.value=it}
+                            cvc.value = it
+                            if (it.length in 1..2) isCardFlipped.value=true else {
+                                isCardFlipped.value=false
+                            }
                         },
 
                         label = {
@@ -299,7 +314,7 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         .height(40.dp),
                     onClick = {
                         navController.navigate("SuccessfulPaymentScreen")
-                        viewModel.addCourse.value = true
+                        viewModel.purchasedCourses.add(viewModel.addCourse)
 
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -307,6 +322,7 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(12.dp),
+                    enabled = isButtonEnabled
 
                 ) {
                     Text(
@@ -316,6 +332,8 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                     )
 
                 }
+
+
 
 
             }
@@ -406,6 +424,7 @@ fun CardBack(cvc: String){
     ) {
         Card(modifier = Modifier
             .fillMaxWidth()
+            .graphicsLayer(scaleX = -1f)
             .height(40.dp),
             shape = RectangleShape,
             colors = CardDefaults.cardColors(
@@ -416,9 +435,9 @@ fun CardBack(cvc: String){
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(19.dp),
+                .padding(10.dp),
 
-            horizontalAlignment = Alignment.End
+            horizontalAlignment = Alignment.Start
 
         ) {
             Card(modifier = Modifier
@@ -429,13 +448,17 @@ fun CardBack(cvc: String){
                     containerColor = Color.LightGray
                 )) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.run {
+                        fillMaxWidth()
+
+                    },
 
                     horizontalAlignment = Alignment.CenterHorizontally
 
                 ){
                 Text(
                     text = cvc,
+                    modifier = Modifier.graphicsLayer(scaleX = -1f),
                     fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
                     fontSize = 24.sp,
                     color = Color.Black

@@ -19,8 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,7 +37,6 @@ import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.screens.ResearchScreen
 import com.example.projet2cp.screens.SigninScreen
 import com.example.projet2cp.screens.SuccessfulPaymentScreen
-import com.example.projet2cp.ui.forgotPassword.Verification
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
@@ -47,7 +44,7 @@ import com.example.projet2cp.ui.theme.MyPurple
 
 @Preview
 @Composable
-fun registration(){
+fun Registration(){
 
     val navController = rememberNavController()
     NavHost(navController = navController ,
@@ -62,12 +59,12 @@ fun registration(){
             ForgotPassword(navController = navController)
         }
         composable("MBI"){
-            Mbi(navController = navController)
+            Mbi()
         }
     }
 }
 @Composable
-fun Mbi(navController: NavHostController) {
+fun Mbi() {
     val viewModel: NavigationViewModel = viewModel()
     val uiColor = if (isSystemInDarkTheme()) Black else White
     Surface (
@@ -124,7 +121,10 @@ fun BottomBar(mbiNavController: NavHostController) {
         var profile by remember { mutableStateOf(true) }
         var search by remember { mutableStateOf(false) }
         var course by remember { mutableStateOf(false) }
+        val bgColor = if (isSystemInDarkTheme()) White else MyGray
         var infarmations by remember { mutableStateOf(false) }
+
+
             IconButton(
                 onClick = {
                     profile  = true
@@ -138,7 +138,7 @@ fun BottomBar(mbiNavController: NavHostController) {
                     painter = painterResource(id = com.example.projet2cp.R.drawable.loginicon),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = if (profile){uiCol}else {if (isSystemInDarkTheme()) Color.White else MyGray}
+                    tint = if (profile){uiCol}else { bgColor }
                 )
             }
             IconButton(onClick = {
@@ -152,7 +152,7 @@ fun BottomBar(mbiNavController: NavHostController) {
                     painter = painterResource(id=  com.example.projet2cp.R.drawable.search),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = if (search){uiCol}else {if (isSystemInDarkTheme()) Color.White else MyGray}
+                    tint = if (search){uiCol}else {bgColor}
                 )
             }
             IconButton(onClick = {
@@ -167,7 +167,7 @@ fun BottomBar(mbiNavController: NavHostController) {
                     painter = painterResource(id=  com.example.projet2cp.R.drawable.cours),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint =  if (course){uiCol}else {if (isSystemInDarkTheme()) Color.White else MyGray}
+                    tint =  if (course){uiCol}else {bgColor}
                 )
             }
             IconButton(onClick = {
@@ -180,7 +180,7 @@ fun BottomBar(mbiNavController: NavHostController) {
                     painter = painterResource(id=  com.example.projet2cp.R.drawable.informations),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = if (infarmations){uiCol}else {if (isSystemInDarkTheme()) Color.White else MyGray}
+                    tint = if (infarmations){uiCol}else {bgColor}
                 )
             }
 

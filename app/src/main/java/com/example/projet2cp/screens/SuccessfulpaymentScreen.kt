@@ -1,5 +1,6 @@
 package com.example.projet2cp.screens
 
+import NavigationViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
