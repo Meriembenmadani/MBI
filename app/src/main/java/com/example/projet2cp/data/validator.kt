@@ -1,4 +1,4 @@
-package com.example.projet2cp.data.rules
+package com.example.projet2cp.data
 
 object validator {
     fun validateUserName(uName:String) :ValidationResult{

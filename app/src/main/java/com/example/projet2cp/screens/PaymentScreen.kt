@@ -254,7 +254,6 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                             unfocusedTextColor = MyGray,
                         ),
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
                         ),
                         isError = expiryError,

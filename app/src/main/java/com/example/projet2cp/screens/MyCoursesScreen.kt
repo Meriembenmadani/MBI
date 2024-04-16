@@ -170,7 +170,7 @@ fun Course(data:  List<Course>,viewModel: NavigationViewModel ) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                            Text(text = "${item.name} ${viewModel.selectedLanguage} ${viewModel.selectedLevel} Classe",
+                            Text(text = "${item.name} ${item.language} ${item.level} Classe",
                                 fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
                                 fontSize = 12.5.sp,
                                 color = uiColor

@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.projet2cp.data.rules.validator
 import com.google.firebase.auth.FirebaseAuth
+
+
 
 class SignUpViewModel: ViewModel() {
    private val TAG = SignUpViewModel::class.simpleName

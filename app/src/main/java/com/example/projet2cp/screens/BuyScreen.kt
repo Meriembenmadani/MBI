@@ -226,6 +226,8 @@ fun CourseCard(course: Course, index: Int,navController:NavHostController,viewMo
 
                   onClick = {
                       navController.navigate("PaymentScreen")
+                      course.level = viewModel.selectedLevel
+                      course.language = viewModel.selectedLanguage
 
                       viewModel.addCourse = course
 

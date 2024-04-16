@@ -47,7 +47,7 @@ fun FunTextField(
     errorStatus:Boolean,
     onTextSelected:(String)->Unit,
 
-) {
+) : String{
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
 
 
@@ -92,6 +92,7 @@ fun FunTextField(
 
         isError = !errorStatus
     )
+    return textValue.value
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

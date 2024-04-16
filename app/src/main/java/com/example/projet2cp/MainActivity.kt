@@ -2,6 +2,7 @@ package com.example.projet2cp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.R
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-         Mbi()
+            com.example.projet2cp.ui.Mbi()
 
         }
     }

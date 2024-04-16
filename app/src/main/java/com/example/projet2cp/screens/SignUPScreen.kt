@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,8 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
-import com.example.projet2cp.data.SignUpViewModel
 import com.example.projet2cp.data.SignUpUIEvent
+import com.example.projet2cp.data.SignUpViewModel
 import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
@@ -39,7 +40,8 @@ import com.example.projet2cp.login.SocialMediaLogIn
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
-
+import com.google.firebase.database.FirebaseDatabase
+import android.widget.Toast
 
 
 @Composable
@@ -50,6 +52,8 @@ fun SigninScreen(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
+
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -151,7 +155,6 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostControlle
 
 @Composable
 fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: SignUpViewModel= viewModel(), navController: NavHostController) {
-
     FunTextField(
         label = "User Name",
         onTextSelected = {
@@ -161,7 +164,7 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: SignUpViewM
         errorStatus = loginViewModel.registrationUIState.value.userNameError
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
-    FunTextField(
+     FunTextField(
         label = "Email",
         onTextSelected = {
             loginViewModel.onEvent(SignUpUIEvent.EmailChanged(it),navController)
@@ -179,12 +182,9 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: SignUpViewM
         errorStatus = loginViewModel.registrationUIState.value.passwordError
     )
     Spacer(modifier = Modifier.height(screenHeight * 0.03f))
-
     ButtonComponent(value = "Sign Up",
         onButtonClicked ={
             loginViewModel.onEvent(SignUpUIEvent.SignUpButtonClicked,navController)
-
-
 
         },
         isEnabled = loginViewModel.allValidationPassed.value

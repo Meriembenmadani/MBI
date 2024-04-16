@@ -1,10 +1,9 @@
-package com.example.projet2cp.data.rules
+package com.example.projet2cp.data
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.projet2cp.data.LoginUIEvent
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel :ViewModel(){

@@ -33,9 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
 import com.example.projet2cp.data.LoginUIEvent
-import com.example.projet2cp.data.SignUpViewModel
-import com.example.projet2cp.data.SignUpUIEvent
-import com.example.projet2cp.data.rules.LoginViewModel
+import com.example.projet2cp.data.LoginViewModel
 import com.example.projet2cp.login.ButtonComponent
 import com.example.projet2cp.login.FunPassWordField
 import com.example.projet2cp.login.FunTextField
@@ -44,7 +42,7 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 
 @Composable
-fun LoginScreen(navController: NavHostController,loginViewModel:LoginViewModel= viewModel()) {
+fun LoginScreen(navController: NavHostController,loginViewModel: LoginViewModel = viewModel()) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -156,7 +154,7 @@ fun TopSection(screenWidth: Dp, screenHeight: Dp) {
 }
 
 @Composable
-fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel:LoginViewModel= viewModel()) {
+fun LoginSection(screenWidth: Dp, screenHeight: Dp,navController: NavHostController,loginViewModel: LoginViewModel = viewModel()) {
     FunTextField(
         label = "Email",
         onTextSelected = {
