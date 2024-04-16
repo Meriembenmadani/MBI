@@ -46,9 +46,9 @@ fun SuccessfulPaymentScreen( mbiNavController: NavHostController) {
                     end = screenWidth * 0.05f,
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.Center,
         ) {
-            Image(painter = painterResource(id = R.drawable.successfulpayment), contentDescription = "")
+
         }
     }
 }
