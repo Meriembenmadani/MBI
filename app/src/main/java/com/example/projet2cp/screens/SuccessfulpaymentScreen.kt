@@ -9,14 +9,19 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
 import com.example.projet2cp.ui.theme.Black
@@ -48,7 +53,25 @@ fun SuccessfulPaymentScreen( mbiNavController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
+            Image(
+                painter = if (isSystemInDarkTheme()) painterResource(id = R.drawable.successfulpaymentdark) else painterResource(id = R.drawable.successfulpayment),
+                contentDescription = "",
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
 
+            ) {
+
+
+            Text(
+
+                text = "Successful payment",
+                fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
+                fontSize = 32.42.sp,
+                color = if (isSystemInDarkTheme()) Color.White else Color.Black
+            )}
         }
     }
 }

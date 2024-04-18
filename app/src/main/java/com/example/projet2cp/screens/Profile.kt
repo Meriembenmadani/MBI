@@ -1,5 +1,8 @@
 package com.example.projet2cp.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,8 +59,7 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.setValue
-
-
+import coil.compose.rememberImagePainter
 
 
 @Composable
@@ -155,6 +159,20 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     val context= LocalContext.current
     var showDialog by remember { mutableStateOf<Boolean>(false) }
+    val imageUri = rememberSaveable { mutableStateOf("") }
+    val painter = rememberImagePainter(
+        if(imageUri.value.isEmpty())
+            R.drawable.profile
+        else
+            imageUri.value
+    )
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+    ){uri: Uri? ->
+        uri?.let { imageUri.value= it.toString() }
+        
+    }
 
 
     Box {
@@ -167,7 +185,7 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.profile),
+                painter = painter,
                 contentDescription = "profile image",
                 modifier = modifier.size(130.dp),
                 contentScale = ContentScale.Crop
@@ -179,8 +197,9 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
             contentDescription = null,
             modifier = Modifier
                 .size(24.dp)
-                .offset(x = 110.dp, 115.dp)
-                .clickable { },
+                .offset(x = (screenWidth * 0.30f - 12.dp), y = (screenWidth * 0.32f - 12.dp))
+                .wrapContentSize()
+                .clickable {launcher.launch("image/*") },
         )
     }
 }

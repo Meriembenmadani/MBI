@@ -136,7 +136,8 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         .border(
                             width = 2.dp,
                             color = uiColor,
-                            shape = RectangleShape
+                            shape = RoundedCornerShape(6.dp)
+
                         ),
                     maxLines = 1,
                     singleLine = true,
@@ -155,9 +156,9 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         )
                     },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = uiColor,
-                        unfocusedBorderColor = uiColor,
-                        errorBorderColor = uiColor,
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        errorBorderColor = Color.Transparent,
                         cursorColor = uiColor,
                         errorTextColor = Color.Red,
                         focusedTextColor = MyGray,
@@ -176,7 +177,8 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         .border(
                             width = 2.dp,
                             color = uiColor,
-                            shape = RectangleShape
+                            shape = RoundedCornerShape(6.dp)
+
                         ),
                     maxLines = 1,
                     singleLine = true,
@@ -197,9 +199,9 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         )
                     },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = uiColor,
-                        unfocusedBorderColor = uiColor,
-                        errorBorderColor = uiColor,
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        errorBorderColor = Color.Transparent,
                         cursorColor = uiColor,
                         errorTextColor = Color.Red,
                         focusedTextColor = MyGray,
@@ -226,7 +228,7 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                             .border(
                                 width = 2.dp,
                                 color = uiColor,
-                                shape = RectangleShape
+                                shape = RoundedCornerShape(6.dp)
                             ),
                         maxLines = 1,
                         singleLine = true,
@@ -245,9 +247,9 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                             )
                         },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = uiColor,
-                            unfocusedBorderColor = uiColor,
-                            errorBorderColor = uiColor,
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent,
+                            errorBorderColor = Color.Transparent,
                             cursorColor = uiColor,
                             errorTextColor = Color.Red,
                             focusedTextColor = MyGray,
@@ -268,7 +270,8 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                             .border(
                                 width = 2.dp,
                                 color = uiColor,
-                                shape = RectangleShape
+                                shape = RoundedCornerShape(6.dp)
+
                             ),
                         maxLines = 1,
                         singleLine = true,
@@ -289,9 +292,9 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                             )
                         },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = uiColor,
-                            unfocusedBorderColor = uiColor,
-                            errorBorderColor = uiColor,
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent,
+                            errorBorderColor = Color.Transparent,
                             cursorColor = uiColor,
                             errorTextColor = Color.Red,
                             focusedTextColor = MyGray,
@@ -320,7 +323,7 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         containerColor = uiColor,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(6.dp),
                     enabled = isButtonEnabled
 
                 ) {
