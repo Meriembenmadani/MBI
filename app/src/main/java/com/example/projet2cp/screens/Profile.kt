@@ -33,8 +33,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +58,7 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 import com.google.firebase.auth.FirebaseAuth
 import coil.compose.rememberImagePainter
+import com.example.projet2cp.data.ImageEntity
 import com.example.projet2cp.data.ImageViewModel
 
 
@@ -150,25 +154,38 @@ private fun CreateInfo(loginViewModel: SignUpViewModel= viewModel()) {
 }
 
 @Composable
-private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp,viawModel: ImageViewModel) {
-
+private fun CreateImageProfile(
+    modifier: Modifier = Modifier,
+    screenWidth: Dp,
+    screenHeight: Dp,
+    viewModel: ImageViewModel
+) {
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
+
+    // State to hold the list of images
+    var images by remember { mutableStateOf<List<ImageEntity>>(emptyList()) }
+
+    // LaunchedEffect to fetch images when the composable is first launched
+    LaunchedEffect(Unit) {
+        val fetchedImages = viewModel.getAllImages()
+        images = fetchedImages
+    }
+
     val painter = rememberImagePainter(
-        if(viawModel.imageUri.value.isEmpty())
-            R.drawable.profile
-        else
-            viawModel.imageUri
+        data = if (images.isEmpty()) {
+            painterResource(id = R.drawable.profile)
+        } else {
+            Uri.parse(images.firstOrNull()?.uri ?: "")
+        }
     )
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-    ){uri: Uri? ->
-        uri?.let { viawModel.imageUri.value= it.toString()
-
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.saveImageUri(it.toString())
         }
-
     }
-
 
     Box {
         Surface(
@@ -194,10 +211,11 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
                 .size(24.dp)
                 .offset(x = (screenWidth * 0.30f - 12.dp), y = (screenWidth * 0.32f - 12.dp))
                 .wrapContentSize()
-                .clickable {launcher.launch("image/*") },
+                .clickable { launcher.launch("image/*") },
         )
     }
 }
+
 
 @Composable
 private fun CreateImageProject(modifier: Modifier= Modifier) {
