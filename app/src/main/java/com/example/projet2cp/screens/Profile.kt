@@ -33,20 +33,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,12 +54,12 @@ import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 import com.google.firebase.auth.FirebaseAuth
-import androidx.compose.runtime.setValue
 import coil.compose.rememberImagePainter
+import com.example.projet2cp.data.ImageViewModel
 
 
 @Composable
-fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpViewModel = viewModel()) {
+fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: ImageViewModel = viewModel()) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -71,7 +67,7 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpVie
     val buttonClickedState = remember {
         mutableStateOf(false)
     }
-     val auth: FirebaseAuth
+    val auth: FirebaseAuth
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,47 +78,47 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpVie
 
     ) {
 
-            Column(modifier = Modifier
-                .fillMaxHeight()
-                .padding(
-                    top = screenHeight * 0.05f,
-                    start = screenWidth * 0.05f,
-                    end = screenWidth * 0.05f,
+        Column(modifier = Modifier
+            .fillMaxHeight()
+            .padding(
+                top = screenHeight * 0.05f,
+                start = screenWidth * 0.05f,
+                end = screenWidth * 0.05f,
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+        ) {
+            CreateImageProfile(Modifier,screenWidth, screenHeight,loginViewModel)
+            Spacer(modifier = Modifier.height(5.dp))
+            CreateInfo()
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp),
+                onClick = {
+                    buttonClickedState.value= ! buttonClickedState.value
+
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = uiColor,
+                    contentColor = Color.White
                 ),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top,
-                 ) {
-                CreateImageProfile(Modifier,screenWidth, screenHeight)
-                Spacer(modifier = Modifier.height(5.dp))
-                CreateInfo()
-                Spacer(modifier = Modifier.height(10.dp))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp),
-                    onClick = {
-                        buttonClickedState.value= ! buttonClickedState.value
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Text(
+                    text = "Certificates",
+                    fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
+                    fontSize = 14.sp
+                )
 
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                            containerColor = uiColor,
-                            contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(12.dp),
-               ) {
-                    Text(
-                        text = "Certificates",
-                        fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
-                        fontSize = 14.sp
-                    )
-
-                }
-                if (buttonClickedState.value){
-                    Content(screenWidth,screenHeight)
-                } else{
-                    Box {}
-                }
             }
+            if (buttonClickedState.value){
+                Content(screenWidth,screenHeight)
+            } else{
+                Box {}
+            }
+        }
     }
 
 }
@@ -154,24 +150,23 @@ private fun CreateInfo(loginViewModel: SignUpViewModel= viewModel()) {
 }
 
 @Composable
-private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp) {
+private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp,viawModel: ImageViewModel) {
 
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-    val context= LocalContext.current
-    var showDialog by remember { mutableStateOf<Boolean>(false) }
-    val imageUri = rememberSaveable { mutableStateOf("") }
     val painter = rememberImagePainter(
-        if(imageUri.value.isEmpty())
+        if(viawModel.imageUri.value.isEmpty())
             R.drawable.profile
         else
-            imageUri.value
+            viawModel.imageUri
     )
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
     ){uri: Uri? ->
-        uri?.let { imageUri.value= it.toString() }
-        
+        uri?.let { viawModel.imageUri.value= it.toString()
+
+        }
+
     }
 
 
@@ -273,7 +268,7 @@ fun Portfolio(data: List<String>) {
                     CreateImageProject()
                     Column(modifier = Modifier
                         .padding(7.dp)
-                        ) {
+                    ) {
                         Text(text = item,
                             fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
                             fontSize = 20.sp,
@@ -291,4 +286,3 @@ fun Portfolio(data: List<String>) {
         }
     }
 }
-  

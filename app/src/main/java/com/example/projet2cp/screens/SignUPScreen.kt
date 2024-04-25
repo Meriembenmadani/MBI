@@ -81,7 +81,7 @@ fun SigninScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SinginSection(screenWidth, screenHeight, navController = navController)
-                Spacer(modifier = Modifier.height(screenHeight * 0.03f)) // Increased to 3% of screen height
+                Spacer(modifier = Modifier.height(screenHeight * 0.03f))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

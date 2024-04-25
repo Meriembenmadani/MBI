@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            com.example.projet2cp.ui.Registration()
+            com.example.projet2cp.ui.Mbi()
 
 
         }
