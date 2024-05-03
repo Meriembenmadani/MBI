@@ -37,12 +37,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -59,11 +61,10 @@ import com.example.projet2cp.ui.theme.MyPurple
 import com.google.firebase.auth.FirebaseAuth
 import coil.compose.rememberImagePainter
 import com.example.projet2cp.data.ImageEntity
-import com.example.projet2cp.data.ImageViewModel
 
 
 @Composable
-fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: ImageViewModel = viewModel()) {
+fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpViewModel= viewModel()) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -92,7 +93,7 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: ImageView
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
-            CreateImageProfile(Modifier,screenWidth, screenHeight,loginViewModel)
+            CreateImageProfile(Modifier,screenWidth, screenHeight)
             Spacer(modifier = Modifier.height(5.dp))
             CreateInfo()
             Spacer(modifier = Modifier.height(10.dp))
@@ -154,38 +155,26 @@ private fun CreateInfo(loginViewModel: SignUpViewModel= viewModel()) {
 }
 
 @Composable
-private fun CreateImageProfile(
-    modifier: Modifier = Modifier,
-    screenWidth: Dp,
-    screenHeight: Dp,
-    viewModel: ImageViewModel
-) {
+private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp) {
+
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-
-    // State to hold the list of images
-    var images by remember { mutableStateOf<List<ImageEntity>>(emptyList()) }
-
-    // LaunchedEffect to fetch images when the composable is first launched
-    LaunchedEffect(Unit) {
-        val fetchedImages = viewModel.getAllImages()
-        images = fetchedImages
-    }
-
+    val context= LocalContext.current
+    var showDialog by remember { mutableStateOf<Boolean>(false) }
+    val imageUri = rememberSaveable { mutableStateOf("") }
     val painter = rememberImagePainter(
-        data = if (images.isEmpty()) {
-            painterResource(id = R.drawable.profile)
-        } else {
-            Uri.parse(images.firstOrNull()?.uri ?: "")
-        }
+        if(imageUri.value.isEmpty())
+            R.drawable.profile
+        else
+            imageUri.value
     )
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-    ) { uri: Uri? ->
-        uri?.let {
-            viewModel.saveImageUri(it.toString())
-        }
+    ){uri: Uri? ->
+        uri?.let { imageUri.value= it.toString() }
+
     }
+
 
     Box {
         Surface(
@@ -211,10 +200,11 @@ private fun CreateImageProfile(
                 .size(24.dp)
                 .offset(x = (screenWidth * 0.30f - 12.dp), y = (screenWidth * 0.32f - 12.dp))
                 .wrapContentSize()
-                .clickable { launcher.launch("image/*") },
+                .clickable {launcher.launch("image/*") },
         )
     }
 }
+
 
 
 @Composable
