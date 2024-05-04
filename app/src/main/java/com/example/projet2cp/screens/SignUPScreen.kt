@@ -97,8 +97,6 @@ fun SigninScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         SocialMediaLogIn(icon = R.drawable.google, text = "Google", modifier = Modifier.weight(1f)) {}
-                        Spacer(modifier = Modifier.width(screenWidth * 0.03f))
-                        SocialMediaLogIn(icon = R.drawable.facebook, text = "Facebook", modifier = Modifier.weight(1f)) {}
                     }
                     Spacer(modifier = Modifier.height(screenHeight * 0.04f))
                     Box(

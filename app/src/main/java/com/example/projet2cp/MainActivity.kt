@@ -17,6 +17,7 @@ import com.example.projet2cp.screens.PaymentScreen
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.ui.Mbi
 import com.example.projet2cp.ui.Registration
+import com.google.firebase.FirebaseApp
 import java.lang.reflect.Modifier
 
 class MainActivity : ComponentActivity() {
@@ -24,8 +25,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-            com.example.projet2cp.ui.Mbi()
+            FirebaseApp.initializeApp(this)
+            com.example.projet2cp.ui.Registration()
 
 
         }

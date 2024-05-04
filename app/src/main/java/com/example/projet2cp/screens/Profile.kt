@@ -1,5 +1,6 @@
 package com.example.projet2cp.screens
 
+import NavigationViewModel
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,6 +11,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,6 +23,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -34,6 +39,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +57,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
@@ -60,11 +67,11 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 import com.google.firebase.auth.FirebaseAuth
 import coil.compose.rememberImagePainter
-import com.example.projet2cp.data.ImageEntity
+
 
 
 @Composable
-fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpViewModel= viewModel()) {
+fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationViewModel= viewModel()) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -73,6 +80,9 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpVie
         mutableStateOf(false)
     }
     val auth: FirebaseAuth
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchUserName()
+    }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -130,22 +140,24 @@ fun ProfileScreen( mbiNavController: NavHostController,loginViewModel: SignUpVie
 
 
 @Composable
-private fun CreateInfo(loginViewModel: SignUpViewModel= viewModel()) {
+private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
 
+
+    val userEmail = viewModel.getUserEmail()
 
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     Column (
         modifier = Modifier.padding(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){ Text(
-        text = "Meriem Benmadani",
+        text = viewModel.userName,
         fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
         fontSize = 20.sp,
         color = uiColor
     )
 
         Text(
-            text = "meriem@gmail.com",
+            text =userEmail,
             modifier = Modifier.padding(2.dp),
             fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
             fontSize = 13.6.sp,
@@ -155,25 +167,30 @@ private fun CreateInfo(loginViewModel: SignUpViewModel= viewModel()) {
 }
 
 @Composable
-private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp) {
-
-    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-    val context= LocalContext.current
-    var showDialog by remember { mutableStateOf<Boolean>(false) }
-    val imageUri = rememberSaveable { mutableStateOf("") }
-    val painter = rememberImagePainter(
-        if(imageUri.value.isEmpty())
-            R.drawable.profile
-        else
-            imageUri.value
+private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp,viewModel: NavigationViewModel= viewModel()) {
+    val avatarList = listOf(
+        R.drawable.avatar1,
+        R.drawable.avatar2,
+        R.drawable.avatar3,
+        R.drawable.avatar4,
+        R.drawable.avatar5,
+        R.drawable.avatar6,
+        R.drawable.avatar7,
+        R.drawable.avatar8,
+        R.drawable.avatar9
     )
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
+    var selectedAvatar by rememberSaveable { mutableStateOf(viewModel.selectedAvatar) }
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-    ){uri: Uri? ->
-        uri?.let { imageUri.value= it.toString() }
+    val avatar by viewModel.avatar.collectAsState()
 
+    var showDialog by remember { mutableStateOf<Boolean>(false) }
+
+    val userId = "tp3gaQ07XJXXKybAbEE6xReXxq63"
+    LaunchedEffect(key1 = userId) {
+        viewModel.getAvatar()
     }
+    val painter = viewModel.avatar?.let { rememberImagePainter(data = it) }
 
 
     Box {
@@ -185,8 +202,9 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
             shadowElevation = 4.dp,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
         ) {
+
             Image(
-                painter = painter,
+                painter =  painterResource(id = avatar ?: R.drawable.profile),
                 contentDescription = "profile image",
                 modifier = modifier.size(130.dp),
                 contentScale = ContentScale.Crop
@@ -200,12 +218,32 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
                 .size(24.dp)
                 .offset(x = (screenWidth * 0.30f - 12.dp), y = (screenWidth * 0.32f - 12.dp))
                 .wrapContentSize()
-                .clickable {launcher.launch("image/*") },
+                .clickable { showDialog = true },
         )
+
+        if (showDialog) {
+            Dialog(onDismissRequest = { showDialog = false }) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    contentPadding = PaddingValues(8.dp)
+                ) {
+                    items(avatarList) { avatar ->
+                        Image(
+                            painter = painterResource(id = avatar),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clickable {
+                                    viewModel.saveAvatar(avatar)
+                                    showDialog = false
+                                }
+                        )
+                    }
+                }
+            }
+        }
     }
 }
-
-
 
 @Composable
 private fun CreateImageProject(modifier: Modifier= Modifier) {
