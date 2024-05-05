@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -30,13 +31,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -54,6 +59,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,7 +109,7 @@ fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationView
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
-            CreateImageProfile(Modifier,screenWidth, screenHeight)
+            CreateImageProfile(Modifier,screenWidth, screenHeight,viewModel,mbiNavController)
             Spacer(modifier = Modifier.height(5.dp))
             CreateInfo()
             Spacer(modifier = Modifier.height(10.dp))
@@ -141,23 +147,77 @@ fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationView
 
 @Composable
 private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
-
-
     val userEmail = viewModel.getUserEmail()
-
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
+    var isEditing by remember { mutableStateOf(false) }
+    var newUsername by remember { mutableStateOf(viewModel.userName) }
+    var showCard by remember { mutableStateOf(false) }
+
     Column (
         modifier = Modifier.padding(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){ Text(
-        text = viewModel.userName,
-        fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
-        fontSize = 20.sp,
-        color = uiColor
-    )
+    ) {
+        if (showCard) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(12.dp),
+
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TextField(
+                        value = newUsername,
+                        onValueChange = { newUsername = it },
+                        label = { Text("New Username") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(
+                        onClick = {
+                            viewModel.updateUserName(newUsername)
+                            showCard = false
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = uiColor,
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Save")
+                    }
+                }
+            }
+        }else {
+           Row {
+               Text(
+                   text = viewModel.userName,
+                   fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
+                   fontSize = 20.sp,
+                   color = uiColor,
+
+               )
+               Spacer(modifier = Modifier.width(8.dp))
+               Icon(
+                   painter = painterResource(id = R.drawable.pen),
+                   contentDescription = null,
+                   modifier = Modifier
+                       .size(24.dp)
+                       .clickable { showCard = true },
+                   tint = uiColor,
+               )
+           }
+
+        }
 
         Text(
-            text =userEmail,
+            text = userEmail,
             modifier = Modifier.padding(2.dp),
             fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
             fontSize = 13.6.sp,
@@ -166,8 +226,9 @@ private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
     }
 }
 
+
 @Composable
-private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp,viewModel: NavigationViewModel= viewModel()) {
+private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp,viewModel: NavigationViewModel= viewModel(),mbiNavController: NavHostController) {
     val avatarList = listOf(
         R.drawable.avatar1,
         R.drawable.avatar2,
@@ -184,11 +245,15 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
 
     val avatar by viewModel.avatar.collectAsState()
 
+
     var showDialog by remember { mutableStateOf<Boolean>(false) }
 
-    val userId = "tp3gaQ07XJXXKybAbEE6xReXxq63"
-    LaunchedEffect(key1 = userId) {
-        viewModel.getAvatar()
+    val auth = FirebaseAuth.getInstance()
+    val userId = auth.currentUser?.uid
+    if (userId != null) {
+        LaunchedEffect(key1 = userId) {
+            viewModel.getAvatar(userId)
+        }
     }
     val painter = viewModel.avatar?.let { rememberImagePainter(data = it) }
 
@@ -234,8 +299,11 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
                             modifier = Modifier
                                 .size(100.dp)
                                 .clickable {
-                                    viewModel.saveAvatar(avatar)
+                                    if (userId != null) {
+                                        viewModel.saveAvatar(userId, avatar)
+                                    }
                                     showDialog = false
+                                    mbiNavController.navigate("Profile")
                                 }
                         )
                     }
@@ -244,6 +312,7 @@ private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, sc
         }
     }
 }
+
 
 @Composable
 private fun CreateImageProject(modifier: Modifier= Modifier) {
@@ -286,7 +355,7 @@ fun  Content( screenWidth: Dp, screenHeight: Dp){
             border =  BorderStroke(width = 1.dp , color = uiColor),
             color = if (isSystemInDarkTheme()) Black else Color.White
         ) {
-            Portfolio(data = listOf("English A0", "English A1" , "English A2"))
+            Portfolio(data = listOf("English A0", "English A1" , "English A2", "English B1", "English B2", "English C1"))
 
         }
 

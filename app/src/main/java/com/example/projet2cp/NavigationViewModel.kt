@@ -46,7 +46,7 @@ class NavigationViewModel : ViewModel() {
     var addCourse:Course =         Course("Grammar" , "20/02/2024", R.drawable.gramma, 20, 12, 40000.0f)
 
     val purchasedCourses = mutableStateListOf<Course>()
-    var selectedAvatar= R.drawable.profile
+    var selectedAvatar= null
     // Get Firebase instance
     private val database = FirebaseDatabase.getInstance()
 
@@ -54,22 +54,41 @@ class NavigationViewModel : ViewModel() {
     private val myRef = database.getReference("users")
 
     // Save avatar when user selects it
-    fun saveAvatar( avatarId: Int) {
-        myRef.child("avatar").setValue(avatarId).addOnFailureListener { e ->
+    fun saveAvatar( userId: String,avatarId: Int) {
+        myRef.child(userId).child("avatar").setValue(avatarId).addOnFailureListener { e ->
             Log.e("Firebase", "Error writing to database", e)
         }
     }
 
     // Get avatar when you need it
-    fun getAvatar() {
-        myRef.child("avatar").get().addOnSuccessListener {
-            val avatarId = it.value as Long
-            // Update the avatar state
-            avatar.value = avatarId.toInt()
-            Log.d("Firebase", "Successfully retrieved avatar: $avatarId")
+    fun getAvatar(userId: String,) {
+        myRef.child(userId).child("avatar").get().addOnSuccessListener {
+            val avatarId = it.value
+            if (avatarId != null) {
+                // Update the avatar state
+                avatar.value = (avatarId as Long).toInt()
+                Log.d("Firebase", "Successfully retrieved avatar: $avatarId")
+            } else {
+                Log.d("Firebase", "Avatar is null")
+            }
         }.addOnFailureListener{
             // Handle any errors
             Log.e("Firebase", "Error retrieving avatar", it)
+        }
+    }
+    fun updateUserName(newUserName: String) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            db.getReference("users")
+                .child(userId)
+                .child("username")
+                .setValue(newUserName)
+                .addOnSuccessListener {
+                    userName = newUserName
+                }
+                .addOnFailureListener {
+                    // Handle any errors
+                }
         }
     }
 }

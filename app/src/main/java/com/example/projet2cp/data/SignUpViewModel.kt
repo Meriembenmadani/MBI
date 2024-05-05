@@ -13,7 +13,6 @@ class SignUpViewModel: ViewModel() {
    var registrationUIState = mutableStateOf(RegistrationUIState())
    var allValidationPassed = mutableStateOf(false)
    var signUpInProgress = mutableStateOf(false)
-   var signUpError = mutableStateOf<String?>(null)
 
    fun onEvent(event:SignUpUIEvent, navController: NavHostController){
       when(event){
@@ -43,6 +42,7 @@ class SignUpViewModel: ViewModel() {
          }
 
 
+         else -> {}
       }
    }
 
@@ -57,7 +57,7 @@ class SignUpViewModel: ViewModel() {
             if (task.isSuccessful) {
                val signInMethods = task.result?.signInMethods
                if (signInMethods == null || signInMethods.isEmpty()) {
-                  // The email does not exist, you can create the user
+
                   createUserInFirebase(
                      email = registrationUIState.value.email,
                      password = registrationUIState.value.password,
@@ -65,11 +65,11 @@ class SignUpViewModel: ViewModel() {
                      navController = navController
                   )
                } else {
-                  // The email already exists, handle the error
+
                   Log.d(TAG, "Email already exists")
                }
             } else {
-               // Failed to check if the email exists, handle the error
+
                Log.e(TAG, "Failed to check if email exists", task.exception)
             }
          }
@@ -122,44 +122,36 @@ class SignUpViewModel: ViewModel() {
                firebaseUser?.sendEmailVerification()?.addOnCompleteListener { task ->
                   if (task.isSuccessful) {
                      Log.d(TAG, "Verification email sent to ${firebaseUser.email}")
-                     if (firebaseUser.isEmailVerified) {
-                        // The email is verified, you can navigate to the application
-                        val userId = it.result?.user?.uid // Get the user's ID
-                        if (userId != null) {
-                           val db = FirebaseDatabase.getInstance()
-                           val user = hashMapOf(
-                              "username" to username,
-                              "email" to email,
-
-                              )
-                           db.getReference("users")
-                              .child(userId) // Use the user's ID as the key
-                              .setValue(user)
-                              .addOnSuccessListener {
-                                 Log.d(TAG, "User information successfully written!")
-                              }
-                              .addOnFailureListener { e ->
-                                 Log.w(TAG, "Error writing user information", e)
-                              }
-                        }
-                        navController.navigate("MBI")
-                     } else {
-                        // The email is not verified, do not navigate to the application
-                        Log.d(TAG, "Email is not verified. Please verify your email before proceeding.")
-                     }
                   } else {
                      Log.e(TAG, "Failed to send verification email.", task.exception)
                   }
                }
+               val userId = it.result?.user?.uid
+               if (userId != null) {
+                  val db = FirebaseDatabase.getInstance()
+                  val user = hashMapOf(
+                     "username" to username,
+                     "email" to email,
 
-          }
-            navController.navigate("MBI")
+                  )
+                  db.getReference("users")
+                     .child(userId)
+                     .setValue(user)
+                     .addOnSuccessListener {
+                        Log.d(TAG, "User information successfully written!")
+                     }
+                     .addOnFailureListener { e ->
+                        Log.w(TAG, "Error writing user information", e)
+                     }
+               }
+               navController.navigate("MBI")
+            }
+
          }
          .addOnFailureListener {
             Log.d(TAG,"Inside_OnFailureListener")
             Log.d(TAG,"Exception = ${it.message}")
             Log.d(TAG,"Exception = ${it.localizedMessage}")
-            signUpError.value = it.localizedMessage
          }
 
 
