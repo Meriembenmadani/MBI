@@ -203,7 +203,7 @@ private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
                    color = uiColor,
 
                )
-               Spacer(modifier = Modifier.width(8.dp))
+               Spacer(modifier = Modifier.width(15.dp))
                Icon(
                    painter = painterResource(id = R.drawable.pen),
                    contentDescription = null,
