@@ -315,8 +315,12 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
                         .fillMaxWidth()
                         .height(40.dp),
                     onClick = {
+                        val userId = viewModel.auth.currentUser?.uid
+                        if (userId != null) {
+                            viewModel.savePurchasedCourse(userId, viewModel.addCourse)
+                        }
                         navController.navigate("SuccessfulPaymentScreen")
-                        viewModel.purchasedCourses.add(viewModel.addCourse)
+
 
                     },
                     colors = ButtonDefaults.buttonColors(

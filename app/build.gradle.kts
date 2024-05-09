@@ -53,6 +53,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+    }
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
@@ -105,6 +108,13 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation ("com.google.firebase:firebase-database:20.0.3")
     implementation("com.google.android.gms:play-services-auth:21.1.0")
+    implementation ("com.sendgrid:sendgrid-java:4.7.2")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation ("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+
+
 
 
 

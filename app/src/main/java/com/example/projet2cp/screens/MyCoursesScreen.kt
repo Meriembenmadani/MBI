@@ -103,7 +103,10 @@ fun MyCoursesScreen(navController: NavHostController,viewModel: NavigationViewMo
 fun CoursesSection(screenHeight: Dp, screenWidth: Dp,viewModel: NavigationViewModel) {
     val bgColor =  if (isSystemInDarkTheme()) Black else Color.White
 
-
+    val userId = viewModel.auth.currentUser?.uid
+    if (userId != null) {
+        viewModel.getPurchasedCourses(userId)
+    }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -137,8 +140,47 @@ fun CoursesSection(screenHeight: Dp, screenWidth: Dp,viewModel: NavigationViewMo
                     shape = RectangleShape,
 
                 ) {
-                    Course(data = viewModel.purchasedCourses,viewModel)
+                    if (viewModel.purchasedCourses.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth()
+                                .padding(
+                                    top = screenHeight * 0.05f,
+                                    start = screenWidth * 0.05f,
+                                    end = screenWidth * 0.05f,
+                                ),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Image(
+                                painter = if (isSystemInDarkTheme()) painterResource(id = R.drawable.nocoursesdark) else painterResource(id = R.drawable.nocourses),
+                                contentDescription = "",
+                            )
+                            Spacer(modifier = Modifier.height(3.dp))
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
 
+                                ) {
+
+
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "You don't have any courses available at the moment",
+                                        fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                                        fontSize = 22.sp,
+                                        color = if (isSystemInDarkTheme()) Color.White else Color.Black
+                                    )
+                                }}
+                        }
+                    } else {
+                        Course(data = viewModel.purchasedCourses, viewModel)
+                    }
                 }
 
             }

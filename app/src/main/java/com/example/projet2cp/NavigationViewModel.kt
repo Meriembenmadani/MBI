@@ -15,7 +15,7 @@ class NavigationViewModel : ViewModel() {
 
 
     private val db = FirebaseDatabase.getInstance()
-    private val auth = FirebaseAuth.getInstance()
+    val auth = FirebaseAuth.getInstance()
 
 
     var userName by mutableStateOf("")
@@ -89,6 +89,21 @@ class NavigationViewModel : ViewModel() {
                 .addOnFailureListener {
                     // Handle any errors
                 }
+        }
+    }
+    fun savePurchasedCourse(userId: String, course: Course) {
+        myRef.child(userId).child("courses").push().setValue(course)
+            .addOnFailureListener { e ->
+                Log.e("Firebase", "Error writing to database", e)
+            }
+    }
+    fun getPurchasedCourses(userId: String) {
+        myRef.child(userId).child("courses").get().addOnSuccessListener { dataSnapshot ->
+            val courses = dataSnapshot.children.mapNotNull { it.getValue(Course::class.java) }
+            purchasedCourses.clear()
+            purchasedCourses.addAll(courses)
+        }.addOnFailureListener { e ->
+            Log.e("Firebase", "Error reading from database", e)
         }
     }
 }

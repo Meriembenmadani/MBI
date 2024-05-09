@@ -1,14 +1,30 @@
 package com.example.projet2cp.data
 
+import android.app.Activity
+import android.content.Intent
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.GoogleAuthProvider
+
 
 
 class SignUpViewModel: ViewModel() {
+   private val activity: Activity = Activity()
+   companion object {
+      private const val RC_SIGN_IN = 9001
+   }
+   private val auth = FirebaseAuth.getInstance()
+
    private val TAG = SignUpViewModel::class.simpleName
    var registrationUIState = mutableStateOf(RegistrationUIState())
    var allValidationPassed = mutableStateOf(false)
@@ -78,6 +94,8 @@ class SignUpViewModel: ViewModel() {
 
 
    }
+
+
 
    private fun validateDataWithRules() {
       val userNameResult = validator.validateUserName(
@@ -155,5 +173,37 @@ class SignUpViewModel: ViewModel() {
          }
 
 
+   }
+
+   fun signInWithGoogle(launcher: ActivityResultLauncher<Intent>) {
+      val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+         .requestIdToken("674714294123-15ichpu31103hv9rm5j42d2jmtgmncat.apps.googleusercontent.com")
+         .requestEmail()
+         .build()
+
+      val googleSignInClient = GoogleSignIn.getClient(activity, gso)
+      val signInIntent = googleSignInClient.signInIntent
+      launcher.launch(signInIntent)
+   }
+
+   fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+      try {
+         val account = completedTask.getResult(ApiException::class.java)
+         firebaseAuthWithGoogle(account.idToken!!)
+      } catch (e: ApiException) {
+         // Handle sign-in error
+      }
+   }
+
+   private fun firebaseAuthWithGoogle(idToken: String) {
+      val credential = GoogleAuthProvider.getCredential(idToken, null)
+      auth.signInWithCredential(credential)
+         .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+               // Sign in success
+            } else {
+               // Sign in failure
+            }
+         }
    }
 }

@@ -1,5 +1,6 @@
 package com.example.projet2cp.screens
 
+import android.app.Activity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +43,13 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 import com.google.firebase.database.FirebaseDatabase
 import android.widget.Toast
-
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
 fun SigninScreen(
@@ -52,7 +59,15 @@ fun SigninScreen(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
+    val context = LocalContext.current
+    val activity = context as? Activity
 
+    val signInResultLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            loginViewModel.handleSignInResult(task)
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -96,9 +111,8 @@ fun SigninScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        SocialMediaLogIn(icon = R.drawable.google, text = "Google", modifier = Modifier.weight(1f)) {}
-                        Spacer(modifier = Modifier.width(screenWidth * 0.03f))
-                        SocialMediaLogIn(icon = R.drawable.facebook, text = "Facebook", modifier = Modifier.weight(1f)) {}
+                        SocialMediaLogIn(icon = R.drawable.google, text = "Google", modifier = Modifier.weight(1f)) {loginViewModel.signInWithGoogle(signInResultLauncher)}
+
                     }
                     Spacer(modifier = Modifier.height(screenHeight * 0.04f))
                     Box(
@@ -190,3 +204,4 @@ fun SinginSection(screenWidth: Dp, screenHeight: Dp, loginViewModel: SignUpViewM
         isEnabled = loginViewModel.allValidationPassed.value
     )
 }
+

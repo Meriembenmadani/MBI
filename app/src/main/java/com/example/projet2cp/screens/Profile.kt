@@ -149,7 +149,6 @@ fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationView
 private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
     val userEmail = viewModel.getUserEmail()
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-    var isEditing by remember { mutableStateOf(false) }
     var newUsername by remember { mutableStateOf(viewModel.userName) }
     var showCard by remember { mutableStateOf(false) }
 
@@ -208,7 +207,7 @@ private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
                    painter = painterResource(id = R.drawable.pen),
                    contentDescription = null,
                    modifier = Modifier
-                       .size(24.dp)
+                       .size(12.dp)
                        .clickable { showCard = true },
                    tint = uiColor,
                )

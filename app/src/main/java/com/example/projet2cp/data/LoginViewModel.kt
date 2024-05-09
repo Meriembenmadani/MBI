@@ -41,6 +41,20 @@ class LoginViewModel :ViewModel(){
         validateLoginUIDataWithRules()
 
     }
+    fun sendPasswordResetEmail(email: String) {
+        val auth = FirebaseAuth.getInstance()
+
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("Email", "Email sent.")
+                } else {
+                    // Handle any error
+                    // s
+                    Log.e("Email", "Error sending email", task.exception)
+                }
+            }
+    }
 
     private fun validateLoginUIDataWithRules() {
 
@@ -68,6 +82,7 @@ class LoginViewModel :ViewModel(){
             }
 
     }
+
     private fun validateDataWithRules() {
 
         val emailResult = validator.validateEmail(

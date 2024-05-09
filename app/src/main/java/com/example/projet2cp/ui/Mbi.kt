@@ -32,6 +32,7 @@ import com.example.projet2cp.screens.BuyScreen
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.LoginScreen
 import com.example.projet2cp.screens.MyCoursesScreen
+import com.example.projet2cp.screens.NewPassword
 import com.example.projet2cp.screens.PaymentScreen
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.screens.ResearchScreen
@@ -48,7 +49,7 @@ fun Registration(){
 
     val navController = rememberNavController()
     NavHost(navController = navController ,
-        startDestination = "Login"  ){
+        startDestination = "Signin"  ){
         composable("Login"){
             LoginScreen(navController = navController)
         }
@@ -57,6 +58,9 @@ fun Registration(){
         }
         composable("forgotPassword"){
             ForgotPassword(navController = navController)
+        }
+        composable("NewPassword"){
+          NewPassword(navController =navController)
         }
         composable("MBI"){
             Mbi()
