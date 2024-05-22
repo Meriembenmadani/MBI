@@ -39,6 +39,7 @@ import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.screens.ResearchScreen
 import com.example.projet2cp.screens.SigninScreen
 import com.example.projet2cp.screens.SuccessfulPaymentScreen
+import com.example.projet2cp.screens.Verifications
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
@@ -61,7 +62,7 @@ fun Registration(){
             ForgotPassword(navController = navController)
         }
         composable("NewPassword"){
-          NewPassword(navController =navController)
+          Verifications(navController =navController)
         }
         composable("MBI"){
             Mbi()

@@ -38,14 +38,13 @@ import com.example.projet2cp.ui.theme.MyPurple
 
 
 @Composable
-fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewModel = viewModel() ) {
+fun Verifications(navController: NavHostController,loginViewModel: LoginViewModel = viewModel() ) {
     Surface (
         modifier = Modifier.fillMaxSize(),
         color = if (isSystemInDarkTheme()) Black else Color.White
 
     ){
         val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
-        val viewModel1: NavigationViewModel = viewModel()
 
         Column(
             modifier = Modifier
@@ -57,9 +56,9 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
 
-        ){
+            ){
             Text(
-                text = "Forgot password ?",
+                text = "New Password",
                 fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
                 fontSize = 20.sp,
                 color =  if (isSystemInDarkTheme()) MyPurple else Color(0xFF444444)
@@ -74,27 +73,19 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                     ),
             ) {
                 Text(
-                    text = " Don’t worry! It happens. Please enter the email associated with your account.",
+                    text = " Success! We've sent an email to your registered address with a link to reset your password. Please check your inbox (and spam/junk folder) for the email. Click the link provided in the email to create a new password.",
                     fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                     fontSize = 15.2.sp,
                     color =  if (isSystemInDarkTheme()) Color.White else Color(0xB3000000)
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                var email=FunTextField(
-                    label = "Enter email adress",
-                    onTextSelected = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    errorStatus = true
-                )
+
                 Spacer(modifier = Modifier.height(27.dp))
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(40.dp),
-                    onClick = { viewModel1.verification = email
-                        loginViewModel.sendPasswordResetEmail(email)
-                        navController.navigate("Verification")
-                              },
+                    onClick = { navController.navigate("Login")},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = uiColor,
                         contentColor = Color.White
@@ -102,13 +93,13 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
-                        text = "Send Code",
+                        text = "Sign in",
                         fontFamily = FontFamily(listOf(Font(R.font.poppins_medium))),
                         fontSize = 14.sp
                     )
                 }
                 Spacer(modifier = Modifier.height(300.dp))
-                Gotologin(navController)
+                Resend(navController,loginViewModel)
 
             }
 
@@ -120,7 +111,7 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
     }
 }
 @Composable
-fun Gotologin(navController: NavHostController) {
+fun Resend(navController: NavHostController,loginViewModel: LoginViewModel ) {
     Box(
         modifier = Modifier
             .fillMaxWidth(),
@@ -130,20 +121,23 @@ fun Gotologin(navController: NavHostController) {
         Row(
             horizontalArrangement = Arrangement.Center
         ) {
+            val viewModel1: NavigationViewModel = viewModel()
+            val email = viewModel1.verification
+
             Text(
-                text ="Remember password?",
+                text ="If you didn’t receive a link,",
                 color = Color(0xFF94A3B8),
                 fontSize = 14.sp,
                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                 fontWeight = FontWeight.Normal
             )
             Text(
-                text = "Sign In",
+                text = " Resend",
                 color =  if (isSystemInDarkTheme()) Color.White else  Color(0xFF000000),
                 fontSize = 14.sp,
                 fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.clickable {navController.navigate("Login") }
+                modifier = Modifier.clickable {  loginViewModel.sendPasswordResetEmail(email) }
             )
         }
     }

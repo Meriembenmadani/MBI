@@ -27,7 +27,7 @@ class NavigationViewModel : ViewModel() {
 
 
     var userName by mutableStateOf("")
-
+    var verification by mutableStateOf("")
     fun fetchUserName() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
