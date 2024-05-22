@@ -1,20 +1,28 @@
+package com.example.projet2cp
+
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.google.firebase.database.FirebaseDatabase
 import androidx.lifecycle.ViewModel
-import com.example.projet2cp.R
+import androidx.lifecycle.viewModelScope
 import com.example.projet2cp.data.Course
+import com.example.projet2cp.screens.Activity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import kotlinx.coroutines.flow.MutableStateFlow
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.MutableData
+import com.google.firebase.firestore.core.Transaction
 
 class NavigationViewModel : ViewModel() {
 
-
     private val db = FirebaseDatabase.getInstance()
+    private val usersRef = db.getReference("users")
+    private val activitiesRef = db.getReference("activities")
     val auth = FirebaseAuth.getInstance()
 
 
@@ -48,21 +56,17 @@ class NavigationViewModel : ViewModel() {
     val purchasedCourses = mutableStateListOf<Course>()
     var selectedAvatar= null
     // Get Firebase instance
-    private val database = FirebaseDatabase.getInstance()
-
-    // Get reference to the database
-    private val myRef = database.getReference("users")
 
     // Save avatar when user selects it
     fun saveAvatar( userId: String,avatarId: Int) {
-        myRef.child(userId).child("avatar").setValue(avatarId).addOnFailureListener { e ->
+       usersRef.child(userId).child("avatar").setValue(avatarId).addOnFailureListener { e ->
             Log.e("Firebase", "Error writing to database", e)
         }
     }
 
     // Get avatar when you need it
     fun getAvatar(userId: String,) {
-        myRef.child(userId).child("avatar").get().addOnSuccessListener {
+        usersRef.child(userId).child("avatar").get().addOnSuccessListener {
             val avatarId = it.value
             if (avatarId != null) {
                 // Update the avatar state
@@ -92,13 +96,13 @@ class NavigationViewModel : ViewModel() {
         }
     }
     fun savePurchasedCourse(userId: String, course: Course) {
-        myRef.child(userId).child("courses").push().setValue(course)
+        usersRef.child(userId).child("courses").push().setValue(course)
             .addOnFailureListener { e ->
                 Log.e("Firebase", "Error writing to database", e)
             }
     }
     fun getPurchasedCourses(userId: String) {
-        myRef.child(userId).child("courses").get().addOnSuccessListener { dataSnapshot ->
+        usersRef.child(userId).child("courses").get().addOnSuccessListener { dataSnapshot ->
             val courses = dataSnapshot.children.mapNotNull { it.getValue(Course::class.java) }
             purchasedCourses.clear()
             purchasedCourses.addAll(courses)
@@ -106,4 +110,11 @@ class NavigationViewModel : ViewModel() {
             Log.e("Firebase", "Error reading from database", e)
         }
     }
+    fun createActivityReference(activity: Activity) {
+        activitiesRef.child(activity.id).setValue(activity.id)
+
+    }
+
+
+
 }

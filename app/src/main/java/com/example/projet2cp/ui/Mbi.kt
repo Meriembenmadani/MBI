@@ -1,6 +1,6 @@
 package com.example.projet2cp.ui
 
-import NavigationViewModel
+import com.example.projet2cp.NavigationViewModel
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -30,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.BuyScreen
 import com.example.projet2cp.screens.ForgotPassword
+import com.example.projet2cp.screens.HomePage
 import com.example.projet2cp.screens.LoginScreen
 import com.example.projet2cp.screens.MyCoursesScreen
 import com.example.projet2cp.screens.NewPassword
@@ -86,7 +87,7 @@ fun Mbi() {
         ){ it
 
             NavHost(navController = mbiNavController ,
-                startDestination = "Profile"  ){
+                startDestination = "HomeScreen" ){
                 composable("Profile"){
                     ProfileScreen(mbiNavController = mbiNavController)
                 }
@@ -105,6 +106,9 @@ fun Mbi() {
                 composable("MyCoursesScreen"){
                     MyCoursesScreen(navController = mbiNavController, viewModel = viewModel)
                 }
+                composable("HomeScreen"){
+                    HomePage(mbiNavController= mbiNavController, viewModel = viewModel)
+                }
 
                 }
             }
@@ -114,6 +118,9 @@ fun Mbi() {
 
 @Composable
 fun BottomBar(mbiNavController: NavHostController) {
+    val uiColor = if (isSystemInDarkTheme()) Black else White
+
+    Surface(color = uiColor) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -122,34 +129,34 @@ fun BottomBar(mbiNavController: NavHostController) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         val uiCol = if (isSystemInDarkTheme()) MyPurple else MyBleu
-        var profile by remember { mutableStateOf(true) }
+        var profile by remember { mutableStateOf(false) }
         var search by remember { mutableStateOf(false) }
         var course by remember { mutableStateOf(false) }
+        var home by remember { mutableStateOf(true) }
         val bgColor = if (isSystemInDarkTheme()) White else MyGray
-        var infarmations by remember { mutableStateOf(false) }
+        IconButton(
+            onClick = {
+                home = true
+                profile  = false
+                search  = false
+                course = false
+                mbiNavController.navigate("HomeScreen")
+
+            }) {
+            Icon(
+                painter = painterResource(id = com.example.projet2cp.R.drawable.home),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = if (home){uiCol}else { bgColor }
+            )
+        }
 
 
-            IconButton(
-                onClick = {
-                    profile  = true
-                    search  = false
-                    course = false
-                    infarmations= false
-                    mbiNavController.navigate("Profile")
-
-                }) {
-                Icon(
-                    painter = painterResource(id = com.example.projet2cp.R.drawable.loginicon),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = if (profile){uiCol}else { bgColor }
-                )
-            }
             IconButton(onClick = {
+                home = false
                 profile  = false
                 search  = true
                 course = false
-                infarmations= false
                 mbiNavController.navigate("Research")
             }) {
                 Icon(
@@ -160,10 +167,10 @@ fun BottomBar(mbiNavController: NavHostController) {
                 )
             }
             IconButton(onClick = {
+                home = false
                 profile  = false
                 search  = false
                 course = true
-                infarmations= false
                 mbiNavController.navigate("MyCoursesScreen")
 
             }) {
@@ -174,20 +181,24 @@ fun BottomBar(mbiNavController: NavHostController) {
                     tint =  if (course){uiCol}else {bgColor}
                 )
             }
-            IconButton(onClick = {
-                profile  = false
+        IconButton(
+            onClick = {
+                home = false
+                profile  = true
                 search  = false
                 course = false
-                infarmations= true
+                mbiNavController.navigate("Profile")
+
             }) {
-                Icon(
-                    painter = painterResource(id=  com.example.projet2cp.R.drawable.informations),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = if (infarmations){uiCol}else {bgColor}
-                )
-            }
+            Icon(
+                painter = painterResource(id = com.example.projet2cp.R.drawable.loginicon),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = if (profile){uiCol}else { bgColor }
+            )
+        }
 
 
+    }
     }
 }

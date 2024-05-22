@@ -13,6 +13,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.rememberNavController
+import com.example.projet2cp.screens.HomePage
 import com.example.projet2cp.screens.PaymentScreen
 import com.example.projet2cp.screens.ProfileScreen
 import com.example.projet2cp.ui.Mbi
@@ -25,9 +26,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             FirebaseApp.initializeApp(this)
-            com.example.projet2cp.ui.Registration()
-
+            Registration()
 
         }
     }

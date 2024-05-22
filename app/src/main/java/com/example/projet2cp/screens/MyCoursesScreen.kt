@@ -1,6 +1,6 @@
 package com.example.projet2cp.screens
 
-import NavigationViewModel
+import com.example.projet2cp.NavigationViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +33,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -190,7 +189,7 @@ fun CoursesSection(screenHeight: Dp, screenWidth: Dp,viewModel: NavigationViewMo
 }
 
 @Composable
-fun Course(data:  List<Course>,viewModel: NavigationViewModel ) {
+fun Course(data:  List<Course>,viewModel: NavigationViewModel) {
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     LazyColumn {
         items(data) { item ->

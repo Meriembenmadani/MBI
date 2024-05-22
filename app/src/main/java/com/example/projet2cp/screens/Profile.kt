@@ -1,9 +1,6 @@
 package com.example.projet2cp.screens
 
-import NavigationViewModel
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import com.example.projet2cp.NavigationViewModel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -31,8 +28,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -55,11 +50,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,7 +60,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
-import com.example.projet2cp.data.SignUpViewModel
 import com.example.projet2cp.ui.theme.Black
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
@@ -77,7 +69,7 @@ import coil.compose.rememberImagePainter
 
 
 @Composable
-fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationViewModel= viewModel()) {
+fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationViewModel = viewModel()) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -146,7 +138,7 @@ fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationView
 
 
 @Composable
-private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
+private fun CreateInfo(viewModel: NavigationViewModel = viewModel()) {
     val userEmail = viewModel.getUserEmail()
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     var newUsername by remember { mutableStateOf(viewModel.userName) }
@@ -227,7 +219,7 @@ private fun CreateInfo(viewModel: NavigationViewModel= viewModel()) {
 
 
 @Composable
-private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp,viewModel: NavigationViewModel= viewModel(),mbiNavController: NavHostController) {
+private fun CreateImageProfile(modifier: Modifier= Modifier, screenWidth: Dp, screenHeight: Dp, viewModel: NavigationViewModel = viewModel(), mbiNavController: NavHostController) {
     val avatarList = listOf(
         R.drawable.avatar1,
         R.drawable.avatar2,
