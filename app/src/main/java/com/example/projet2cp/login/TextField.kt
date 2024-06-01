@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import com.example.projet2cp.R
+import com.example.projet2cp.ui.theme.EnabledGray
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
 import com.example.projet2cp.ui.theme.MyPurple
@@ -198,7 +199,7 @@ fun ButtonComponent(value:String, onButtonClicked :()->Unit, isEnabled : Boolean
                   onButtonClicked.invoke()
         },
         colors = ButtonDefaults.buttonColors(
-            containerColor = uiColor,
+            containerColor =  if (isEnabled) uiColor else EnabledGray,
             contentColor = Color.White
         ),
         shape = RoundedCornerShape(12.dp),

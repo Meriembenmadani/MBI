@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
 import com.example.projet2cp.ui.theme.Black
+import com.example.projet2cp.ui.theme.EnabledGray
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyGray
 import com.example.projet2cp.ui.theme.MyPurple
@@ -320,7 +321,7 @@ fun PaymentScreen( navController: NavHostController, viewModel: NavigationViewMo
 
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = uiColor,
+                        containerColor = if (isButtonEnabled) uiColor else EnabledGray ,
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(6.dp),

@@ -73,7 +73,7 @@ fun Verifications(navController: NavHostController,loginViewModel: LoginViewMode
                     ),
             ) {
                 Text(
-                    text = " Success! We've sent an email to your registered address with a link to reset your password. Please check your inbox (and spam/junk folder) for the email. Click the link provided in the email to create a new password.",
+                    text = " Success! We've sent an email to your registered address with a link to reset your password. Please check your inbox (and spam/junk folder) for the email. Click the link provided in the email to create a new password.If you change your password, you can  sign in .",
                     fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
                     fontSize = 15.2.sp,
                     color =  if (isSystemInDarkTheme()) Color.White else Color(0xB3000000)

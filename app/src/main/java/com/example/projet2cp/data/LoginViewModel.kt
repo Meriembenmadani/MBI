@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 class LoginViewModel :ViewModel(){
     private val TAG = LoginViewModel::class.simpleName
@@ -101,5 +102,29 @@ class LoginViewModel :ViewModel(){
         )
         allValidationPassed.value =  emailResult.status && passwordResult.status
 
+    }
+    fun doesEmailExist(email: String): Boolean {
+        val auth = FirebaseAuth.getInstance()
+        var emailExists = false
+
+        auth.createUserWithEmailAndPassword(email, "temporaryPassword")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // The email does not exist
+                    // Delete the temporary account
+                    task.result?.user?.delete()
+                } else {
+                    if (task.exception is FirebaseAuthUserCollisionException) {
+                        // The email exists
+                        emailExists = true
+                    }
+                }
+            }
+            .addOnFailureListener {
+                // Handle any error
+                Log.e("Email", "Error checking email", it)
+            }
+
+        return emailExists
     }
 }

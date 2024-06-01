@@ -33,6 +33,7 @@ import com.example.projet2cp.R
 import com.example.projet2cp.data.LoginViewModel
 import com.example.projet2cp.login.FunTextField
 import com.example.projet2cp.ui.theme.Black
+import com.example.projet2cp.ui.theme.EnabledGray
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 
@@ -86,6 +87,7 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                     modifier = Modifier.fillMaxWidth(),
                     errorStatus = true
                 )
+                val doesEmailExist = loginViewModel.doesEmailExist(email)
                 Spacer(modifier = Modifier.height(27.dp))
                 Button(
                     modifier = Modifier
@@ -93,13 +95,14 @@ fun ForgotPassword(navController: NavHostController,loginViewModel: LoginViewMod
                         .height(40.dp),
                     onClick = { viewModel1.verification = email
                         loginViewModel.sendPasswordResetEmail(email)
-                        navController.navigate("Verification")
+                        navController.navigate("NewPassword")
                               },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = uiColor,
+                        containerColor = if (doesEmailExist) uiColor else EnabledGray,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = doesEmailExist
                 ) {
                     Text(
                         text = "Send Code",

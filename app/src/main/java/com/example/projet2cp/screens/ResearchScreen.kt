@@ -49,6 +49,7 @@ import androidx.compose.ui.window.Popup
 import androidx.navigation.NavHostController
 import com.example.projet2cp.R
 import com.example.projet2cp.ui.theme.Black
+import com.example.projet2cp.ui.theme.EnabledGray
 import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 
@@ -180,7 +181,7 @@ fun ResearchSection(screenHeight: Dp,screenWidth:Dp,navController: NavHostContro
                     navController.navigate("buyScreen")
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = uiColor,
+                    containerColor =  if (isButtonEnabled) uiColor else EnabledGray,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(12.dp),

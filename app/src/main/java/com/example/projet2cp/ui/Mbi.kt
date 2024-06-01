@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projet2cp.screens.BuyScreen
+import com.example.projet2cp.screens.CommentSection
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.HomePage
 import com.example.projet2cp.screens.LoginScreen
@@ -73,84 +75,102 @@ fun Registration(){
 fun Mbi() {
     val viewModel: NavigationViewModel = viewModel()
     val uiColor = if (isSystemInDarkTheme()) Black else White
-    Surface (
+    Surface(
         modifier = Modifier.fillMaxSize()
 
-    ){
+    ) {
         val mbiNavController = rememberNavController()
 
         Scaffold(
             bottomBar = {
-             BottomBar(mbiNavController)
+                BottomBar(mbiNavController)
             },
             containerColor = uiColor
 
-        ){ it
+        ) {
+            it
 
-            NavHost(navController = mbiNavController ,
-                startDestination = "HomeScreen" ){
-                composable("Profile"){
+            NavHost(
+                navController = mbiNavController,
+                startDestination = "HomeScreen"
+            ) {
+                composable("Profile") {
                     ProfileScreen(mbiNavController = mbiNavController)
                 }
-                composable("Research"){
-                    ResearchScreen(mbiNavController = mbiNavController, viewModel )
+                composable("Research") {
+                    ResearchScreen(mbiNavController = mbiNavController, viewModel)
                 }
                 composable("buyScreen") {
-                    BuyScreen(mbiNavController,viewModel)
+                    BuyScreen(mbiNavController, viewModel)
                 }
                 composable("PaymentScreen") {
-                   PaymentScreen(navController = mbiNavController,viewModel)
+                    PaymentScreen(navController = mbiNavController, viewModel)
                 }
                 composable("SuccessfulPaymentScreen") {
                     SuccessfulPaymentScreen(mbiNavController = mbiNavController)
                 }
-                composable("MyCoursesScreen"){
+                composable("MyCoursesScreen") {
                     MyCoursesScreen(navController = mbiNavController, viewModel = viewModel)
                 }
-                composable("HomeScreen"){
-                    HomePage(mbiNavController= mbiNavController, viewModel = viewModel)
+                composable("HomeScreen") {
+                    HomePage(mbiNavController = mbiNavController, viewModel = viewModel)
                 }
+                composable("commentSection/{activityId}") { backStackEntry ->
+                    val activityId = backStackEntry.arguments?.getString("activityId")
+                    val configuration = LocalConfiguration.current
+                    val screenWidth = configuration.screenWidthDp.dp
+                    val screenHeight = configuration.screenHeightDp.dp
+                    if (activityId != null) {
+                        CommentSection(
+                            screenHeight,
+                            screenWidth,
+                            navController = mbiNavController,
+                            viewModel,
+                            activityId
+                        )
+                    }
 
                 }
             }
 
         }
     }
+}
 
 @Composable
 fun BottomBar(mbiNavController: NavHostController) {
     val uiColor = if (isSystemInDarkTheme()) Black else White
 
     Surface(color = uiColor) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val uiCol = if (isSystemInDarkTheme()) MyPurple else MyBleu
-        var profile by remember { mutableStateOf(false) }
-        var search by remember { mutableStateOf(false) }
-        var course by remember { mutableStateOf(false) }
-        var home by remember { mutableStateOf(true) }
-        val bgColor = if (isSystemInDarkTheme()) White else MyGray
-        IconButton(
-            onClick = {
-                home = true
-                profile  = false
-                search  = false
-                course = false
-                mbiNavController.navigate("HomeScreen")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val uiCol = if (isSystemInDarkTheme()) MyPurple else MyBleu
+            var profile by remember { mutableStateOf(false) }
+            var search by remember { mutableStateOf(false) }
+            var course by remember { mutableStateOf(false) }
+            var home by remember { mutableStateOf(true) }
+            val bgColor = if (isSystemInDarkTheme()) White else MyGray
+            IconButton(
+                onClick = {
+                    home = true
+                    profile  = false
+                    search  = false
+                    course = false
+                    mbiNavController.navigate("HomeScreen")
 
-            }) {
-            Icon(
-                painter = painterResource(id = com.example.projet2cp.R.drawable.home),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = if (home){uiCol}else { bgColor }
-            )
-        }
+                }) {
+                Icon(
+                    painter = painterResource(id = com.example.projet2cp.R.drawable.home),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = if (home){uiCol}else { bgColor }
+                )
+            }
 
 
             IconButton(onClick = {
@@ -182,24 +202,24 @@ fun BottomBar(mbiNavController: NavHostController) {
                     tint =  if (course){uiCol}else {bgColor}
                 )
             }
-        IconButton(
-            onClick = {
-                home = false
-                profile  = true
-                search  = false
-                course = false
-                mbiNavController.navigate("Profile")
+            IconButton(
+                onClick = {
+                    home = false
+                    profile  = true
+                    search  = false
+                    course = false
+                    mbiNavController.navigate("Profile")
 
-            }) {
-            Icon(
-                painter = painterResource(id = com.example.projet2cp.R.drawable.loginicon),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = if (profile){uiCol}else { bgColor }
-            )
+                }) {
+                Icon(
+                    painter = painterResource(id = com.example.projet2cp.R.drawable.loginicon),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = if (profile){uiCol}else { bgColor }
+                )
+            }
+
+
         }
-
-
-    }
     }
 }

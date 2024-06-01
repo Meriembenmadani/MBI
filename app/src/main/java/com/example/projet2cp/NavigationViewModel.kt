@@ -7,16 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.firebase.database.FirebaseDatabase
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.projet2cp.data.Course
 import com.example.projet2cp.screens.Activity
+import com.example.projet2cp.screens.Commentaire
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.MutableData
-import com.google.firebase.firestore.core.Transaction
 
 class NavigationViewModel : ViewModel() {
 
@@ -110,11 +108,67 @@ class NavigationViewModel : ViewModel() {
             Log.e("Firebase", "Error reading from database", e)
         }
     }
-    fun createActivityReference(activity: Activity) {
-        activitiesRef.child(activity.id).setValue(activity.id)
 
+    val activities = mutableStateListOf<Activity>()
+
+
+    // Save a comment
+    fun saveComment(activityId: String, comment: Commentaire) {
+        Log.d("saveComment", "Saving comment for activityId: $activityId, comment: $comment")
+        val userCommentsRef = FirebaseDatabase.getInstance().getReference("activities").child(activityId).child("comments")
+        val commentId = userCommentsRef.push().key
+        if (commentId!= null) {
+            comment.commentId = commentId
+            // Use setValue() to add the new comment without overwriting existing ones
+            userCommentsRef.child(commentId).setValue(comment)
+        }
     }
 
+    // Function to get all comments for a specific activity and user
+    val comments = MutableStateFlow<List<Commentaire>>(listOf())
 
+    fun getComments(activityId: String) {
+        val userCommentsRef = FirebaseDatabase.getInstance().getReference("activities").child(activityId).child("comments")
+        userCommentsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val commentsList = dataSnapshot.children.mapNotNull { it.getValue(Commentaire::class.java) }
+                comments.value = commentsList
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error...
+            }
+        })
+    }
+
+    fun deleteComment(activityId: String, commentId: String) {
+        // Get reference to the comment
+        val commentRef = activitiesRef.child(activityId).child("comments").child(commentId)
+
+        // Remove the comment from Firebase
+        commentRef.removeValue().addOnSuccessListener {
+            // Successfully deleted comment
+        }.addOnFailureListener { e ->
+            // Handle any errors
+        }
+    }
+
+    fun updateComment(activityId: String, commentId: String, newComment: Commentaire) {
+        // Get reference to the comment
+        val commentRef = activitiesRef.child(activityId).child("comments").child(commentId)
+
+        // Update the comment in Firebase
+        commentRef.setValue(newComment).addOnSuccessListener {
+            // Successfully updated comment
+        }.addOnFailureListener { e ->
+            // Handle any errors
+        }
+    }
+    init {
+        // Initialize activities...
+        activities.forEach { activity ->
+            getComments(activity.id)
+        }
+    }
 
 }

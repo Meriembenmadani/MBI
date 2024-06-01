@@ -9,6 +9,7 @@ val MyBleu = Color(0xFF1E1B6D)
 val MyPurple:Color = Color(0xFFAB4BC2)
 val Black:Color = Color(0xFF000113)
 val MyGray: Color = Color(0xFF8A8A8A)
+val EnabledGray: Color = Color(0xFF7B7B7B)
 
 val BlueGray = Color(0xFF3334155)
 
