@@ -3,6 +3,7 @@ package com.example.projet2cp.screens
 import com.example.projet2cp.NavigationViewModel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -28,15 +29,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,12 +52,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,7 +74,7 @@ import com.example.projet2cp.ui.theme.MyBleu
 import com.example.projet2cp.ui.theme.MyPurple
 import com.google.firebase.auth.FirebaseAuth
 import coil.compose.rememberImagePainter
-
+import com.example.projet2cp.ui.theme.MyGray
 
 
 @Composable
@@ -77,6 +86,7 @@ fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationView
     val buttonClickedState = remember {
         mutableStateOf(false)
     }
+    var showMenu by remember { mutableStateOf(false) }
     val auth: FirebaseAuth
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchUserName()
@@ -86,18 +96,39 @@ fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationView
             .fillMaxWidth()
             .fillMaxHeight()
             .fillMaxSize()
-            .padding(bottom = 10.dp),
+            .padding(bottom = 20.dp),
         color = if (isSystemInDarkTheme()) Black else Color.White
 
     ) {
+        Column (
 
-        Column(modifier = Modifier
-            .fillMaxHeight()
-            .padding(
-                top = screenHeight * 0.05f,
-                start = screenWidth * 0.05f,
-                end = screenWidth * 0.05f,
-            ),
+
+        ){
+        IconButton(
+            onClick = {
+
+                mbiNavController.navigate("MenuSection")
+            },
+            modifier = Modifier.padding(4.dp)){
+
+            Icon(
+                painter = painterResource(id = R.drawable.menu),
+                contentDescription = null,
+                modifier = Modifier.size(30.dp),
+                tint = uiColor
+            )
+        }}
+
+    }
+
+
+    Column(modifier = Modifier
+        .fillMaxHeight()
+        .padding(
+            top = screenHeight * 0.05f,
+            start = screenWidth * 0.05f,
+            end = screenWidth * 0.05f,
+        ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
@@ -134,8 +165,6 @@ fun ProfileScreen( mbiNavController: NavHostController,viewModel: NavigationView
         }
     }
 
-}
-
 
 @Composable
 private fun CreateInfo(viewModel: NavigationViewModel = viewModel()) {
@@ -148,44 +177,7 @@ private fun CreateInfo(viewModel: NavigationViewModel = viewModel()) {
         modifier = Modifier.padding(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (showCard) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                shape = RoundedCornerShape(12.dp),
 
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TextField(
-                        value = newUsername,
-                        onValueChange = { newUsername = it },
-                        label = { Text("New Username") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Button(
-                        onClick = {
-                            viewModel.updateUserName(newUsername)
-                            showCard = false
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = uiColor,
-                            contentColor = Color.White
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Save")
-                    }
-                }
-            }
-        }else {
            Row {
                Text(
                    text = viewModel.userName,
@@ -194,15 +186,7 @@ private fun CreateInfo(viewModel: NavigationViewModel = viewModel()) {
                    color = uiColor,
 
                )
-               Spacer(modifier = Modifier.width(15.dp))
-               Icon(
-                   painter = painterResource(id = R.drawable.pen),
-                   contentDescription = null,
-                   modifier = Modifier
-                       .size(12.dp)
-                       .clickable { showCard = true },
-                   tint = uiColor,
-               )
+
            }
 
         }
@@ -215,7 +199,7 @@ private fun CreateInfo(viewModel: NavigationViewModel = viewModel()) {
             color = if (isSystemInDarkTheme()) Color.White else Black
         )
     }
-}
+
 
 
 @Composable
@@ -391,4 +375,409 @@ fun Portfolio(data: List<String>) {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MenuSection(screenHeight: Dp,screenWidth:Dp,navController: NavHostController,viewModel: NavigationViewModel) {
+    val bgColor =  if (isSystemInDarkTheme()) Color(0xFF3A3A3A) else Color.White
+    val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
+    var commentText by remember { mutableStateOf("") }
+    var contact by remember { mutableStateOf(false) }
+    var sujet by remember { mutableStateOf("") }
+    var section by remember { mutableStateOf("") }
+    var erreur  by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
+    Surface( modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()
+        .fillMaxSize()
+        .padding(bottom = 10.dp),
+        color = if (isSystemInDarkTheme()) Black else Color.White) {
+
+
+    Card(
+        modifier = Modifier.fillMaxSize(),
+        shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = bgColor
+        ),
+    ) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(bottom = 100.dp, top = 30.dp),) {
+        Column (modifier = Modifier.align(Alignment.TopStart)){
+            IconButton(
+                onClick = {
+
+                    navController.navigate("Profile")
+
+                }) {
+                Icon(
+                    painter = painterResource(id = com.example.projet2cp.R.drawable.logout),
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = uiColor
+                )
+            }
+        }
+ Spacer(modifier = Modifier.height(10.dp))
+        Column(modifier = Modifier
+            .padding(
+                top = 12.dp,
+                start = screenWidth * 0.05f,
+                end = screenWidth * 0.05f,
+                bottom =screenHeight* 0.1f
+            )
+            ,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+        ) {
+            var edit by remember { mutableStateOf(false) }
+            Card (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                    .shadow(4.dp)
+                    .clickable { edit = !edit },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isSystemInDarkTheme()) Color(0xFF2A2A2A) else Color(0xFFA7A7A7),
+                )
+            ) {
+
+                Text(
+                    text = "Edit Profile",
+                    modifier = Modifier.padding(2.dp),
+                    fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                    fontSize = 20.sp,
+                    color = if (isSystemInDarkTheme()) Color.White else Black
+                )
+
+            }
+            if (edit){
+                var newUsername by remember { mutableStateOf(viewModel.userName) }
+                @OptIn(ExperimentalMaterial3Api::class)
+                TextField(modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(
+                        width = 1.dp,
+                        color = if (isSystemInDarkTheme()) Color(0xFFC4C4C4) else Color(
+                            0xFF475569
+                        ),
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                    ,
+
+                    shape = RectangleShape,
+                    maxLines = 1,
+
+                    singleLine = true,
+                    value = newUsername,
+                    onValueChange = {
+                        newUsername = it
+                    },
+
+                    label = {
+                        Text(
+                            text = "Update Username",
+                            fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                            color =if (isSystemInDarkTheme()) Color(0xFFC4C4C4) else Color(0xFF475569),
+                            fontSize = 11.sp
+
+                        )
+                    },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        errorBorderColor = Color.Transparent,
+                        cursorColor = uiColor,
+                        focusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
+                        unfocusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
+
+
+
+                        ),
+                    trailingIcon = {
+                        val iconImage = if (newUsername.isNotEmpty()) {
+                            if (isSystemInDarkTheme()) painterResource(id = R.drawable.submitdarck) else painterResource(id = R.drawable.submit)
+                        } else{
+                            painterResource(id = R.drawable.resource_default)
+                        }
+
+
+                        IconButton(onClick = {
+
+                            viewModel.updateUserName(newUsername)
+                            edit =!edit
+
+                        }) {
+                            Image(
+                                painter =iconImage,
+                                contentDescription ="",
+
+                                )
+                        }
+                    },
+
+
+                    )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            if (edit){
+                var newEmamil by remember { mutableStateOf(viewModel.getUserEmail()) }
+                @OptIn(ExperimentalMaterial3Api::class)
+                TextField(modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(
+                        width = 1.dp,
+                        color = if (isSystemInDarkTheme()) Color(0xFFC4C4C4) else Color(
+                            0xFF475569
+                        ),
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                    ,
+
+                    shape = RectangleShape,
+                    maxLines = 1,
+
+                    singleLine = true,
+                    value = newEmamil,
+                    onValueChange = {
+                        newEmamil = it
+                    },
+
+                    label = {
+                        Text(
+                            text = "Update Email",
+                            fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                            color =if (isSystemInDarkTheme()) Color(0xFFC4C4C4) else Color(0xFF475569),
+                            fontSize = 11.sp
+
+                        )
+                    },
+
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        errorBorderColor = Color.Transparent,
+                        cursorColor = uiColor,
+                        focusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
+                        unfocusedTextColor =  if (isSystemInDarkTheme()) Color.White else MyGray,
+
+
+
+                        ),
+                    trailingIcon = {
+                        val iconImage = if (newEmamil.isNotEmpty()) {
+                            if (isSystemInDarkTheme()) painterResource(id = R.drawable.submitdarck) else painterResource(id = R.drawable.submit)
+                        } else{
+                            painterResource(id = R.drawable.resource_default)
+                        }
+
+
+                        IconButton(onClick = {
+
+                            viewModel.updateUserEmail(newEmamil)
+                            edit =!edit
+
+                        }) {
+                            Image(
+                                painter =iconImage,
+                                contentDescription ="",
+
+                                )
+                        }
+                    },
+
+
+                    )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Card (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                    .shadow(4.dp)
+                    .clickable { contact = !contact },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isSystemInDarkTheme()) Color(0xFF2A2A2A) else Color(0xFFA7A7A7),
+                )
+            ) {
+
+                Text(
+                    text = "Contact Us",
+                    modifier = Modifier.padding(2.dp),
+                    fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                    fontSize = 20.sp,
+                    color = if (isSystemInDarkTheme()) Color.White else Black
+                )
+
+            }
+            if (contact) {
+                Dialog(
+                    onDismissRequest = {
+                        contact=!contact
+                    }) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+
+                            .padding(top = 50.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = bgColor,
+                        )
+                    ) {
+                        Column {
+                            Text(
+                                text = "Contact Us",
+                                modifier = Modifier.padding(2.dp),
+                                fontFamily = FontFamily(listOf(Font(R.font.poppins_semi_bold))),
+                                fontSize = 20.sp,
+                                color = uiColor
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            TextField(
+
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .padding(end = 6.dp)
+                                    .border(
+                                        width = 2.dp,
+                                        color = uiColor,
+                                        shape = RoundedCornerShape(6.dp)
+                                    ),
+                                maxLines = 1,
+                                singleLine = true,
+
+                                value = sujet,
+                                onValueChange = {
+                                    sujet=it
+
+                                },
+
+                                label = {
+                                    Text(
+                                        text = "Object",
+                                        fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                                        color = Color(0xFF475569),
+                                    )
+                                },
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = Color.Transparent,
+                                    unfocusedBorderColor = Color.Transparent,
+                                    errorBorderColor = Color.Transparent,
+                                    cursorColor = uiColor,
+                                    errorTextColor = Color.Red,
+                                    focusedTextColor = MyGray,
+                                    unfocusedTextColor = MyGray,
+                                ),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next
+                                ),
+
+
+
+                                )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            TextField(
+
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 6.dp)
+                                    .border(
+                                        width = 2.dp,
+                                        color = uiColor,
+                                        shape = RoundedCornerShape(6.dp)
+                                    ),
+                                maxLines = 1,
+                                singleLine = true,
+
+                                value = section,
+                                onValueChange = {
+                                    section=it
+
+                                },
+
+                                label = {
+                                    Text(
+                                        text = "Section",
+                                        fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                                        color = Color(0xFF475569),
+                                    )
+                                },
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = Color.Transparent,
+                                    unfocusedBorderColor = Color.Transparent,
+                                    errorBorderColor = Color.Transparent,
+                                    cursorColor = uiColor,
+                                    errorTextColor = Color.Red,
+                                    focusedTextColor = MyGray,
+                                    unfocusedTextColor = MyGray,
+                                ),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next
+                                ),
+
+
+
+                                )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            TextField(
+
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 6.dp)
+                                    .border(
+                                        width = 2.dp,
+                                        color = uiColor,
+                                        shape = RoundedCornerShape(6.dp)
+                                    ),
+                                maxLines = 1,
+                                singleLine = true,
+
+                                value = message,
+                                onValueChange = {
+                                    message=it
+
+                                },
+
+                                label = {
+                                    Text(
+                                        text = "Message",
+                                        fontFamily = FontFamily(listOf(Font(R.font.poppins_regular))),
+                                        color = Color(0xFF475569),
+                                    )
+                                },
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = Color.Transparent,
+                                    unfocusedBorderColor = Color.Transparent,
+                                    errorBorderColor = Color.Transparent,
+                                    cursorColor = uiColor,
+                                    errorTextColor = Color.Red,
+                                    focusedTextColor = MyGray,
+                                    unfocusedTextColor = MyGray,
+                                ),
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next
+                                ),
+
+
+
+                                )
+
+
+                        }
+                    }
+                }
+            }
+        }
+    }}}
 }

@@ -93,6 +93,17 @@ class NavigationViewModel : ViewModel() {
                 }
         }
     }
+    fun updateUserEmail(newEmail: String) {
+        val user = auth.currentUser
+        user?.updateEmail(newEmail)?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("UpdateEmail", "User email address updated.")
+            } else {
+                // Handle any errors
+                Log.e("UpdateEmail", "Failed to update user email address.", task.exception)
+            }
+        }
+    }
     fun savePurchasedCourse(userId: String, course: Course) {
         usersRef.child(userId).child("courses").push().setValue(course)
             .addOnFailureListener { e ->

@@ -1,11 +1,17 @@
 package com.example.projet2cp.data
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.internal.Contexts.getApplication
 
 class LoginViewModel :ViewModel(){
     private val TAG = LoginViewModel::class.simpleName
@@ -127,4 +133,8 @@ class LoginViewModel :ViewModel(){
 
         return emailExists
     }
+
+
+
+
 }

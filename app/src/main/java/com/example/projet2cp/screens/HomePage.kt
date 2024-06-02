@@ -102,7 +102,7 @@ fun HomePage(mbiNavController: NavHostController, viewModel: NavigationViewModel
     val uiColor = if (isSystemInDarkTheme()) Color.White else Black
     val offers = listOf(
         Offer(
-            title = "Short Japanese Stories for Kids",
+            title = "Japanese Stories for Kids",
             date = "20/02/2024",
             discount = 30,
             imageResource = R.drawable.japanessoffers,
@@ -143,7 +143,7 @@ fun HomePage(mbiNavController: NavHostController, viewModel: NavigationViewModel
             .fillMaxWidth()
             .fillMaxHeight()
             .fillMaxSize()
-            .padding(bottom =  screenHeight * 0.1f),
+            .padding(bottom = screenHeight * 0.1f),
         color = if (isSystemInDarkTheme()) Black else Color.White
 
     ) {
@@ -420,12 +420,29 @@ fun CommentSection(screenHeight: Dp,screenWidth:Dp,navController: NavHostControl
     val bgColor =  if (isSystemInDarkTheme()) Color(0xFF3A3A3A) else Color.White
     val uiColor = if (isSystemInDarkTheme()) MyPurple else MyBleu
     var commentText by remember { mutableStateOf("") }
+
     Box(modifier = Modifier
         .fillMaxSize()
-        .padding(bottom = 100.dp)) {
+        .padding(bottom = 100.dp,top=30.dp)) {
+        Column (modifier = Modifier.align(Alignment.TopStart)){
+            IconButton(
+                onClick = {
+
+                    navController.navigate("HomeScreen")
+
+                }) {
+                Icon(
+                    painter = painterResource(id = com.example.projet2cp.R.drawable.logout),
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = uiColor
+                )
+            }
+        }
+
      Column(modifier = Modifier
             .padding(
-                top = screenHeight * 0.09f,
+                top = 12.dp,
                 start = screenWidth * 0.05f,
                 end = screenWidth * 0.05f,
                 bottom =screenHeight* 0.1f
@@ -575,7 +592,9 @@ fun Comments(data:  List<Commentaire>, viewModel: NavigationViewModel,activityId
 
 
                 ) {
-                Row(modifier= Modifier.padding(6.dp).fillMaxWidth(),
+                Row(modifier= Modifier
+                    .padding(6.dp)
+                    .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween) {
                     Row(
@@ -598,7 +617,8 @@ fun Comments(data:  List<Commentaire>, viewModel: NavigationViewModel,activityId
 
                     }
                     //Spacer(modifier = Modifier.width(60.dp))
-                    Column(modifier = Modifier.fillMaxHeight()) {
+                    Column() {
+
 
 
                     if(viewModel.userName == item.userName){

@@ -34,6 +34,7 @@ import com.example.projet2cp.screens.CommentSection
 import com.example.projet2cp.screens.ForgotPassword
 import com.example.projet2cp.screens.HomePage
 import com.example.projet2cp.screens.LoginScreen
+import com.example.projet2cp.screens.MenuSection
 import com.example.projet2cp.screens.MyCoursesScreen
 import com.example.projet2cp.screens.NewPassword
 import com.example.projet2cp.screens.PaymentScreen
@@ -131,6 +132,13 @@ fun Mbi() {
                     }
 
                 }
+
+                composable("MenuSection") {
+                    val configuration = LocalConfiguration.current
+                    val screenWidth = configuration.screenWidthDp.dp
+                    val screenHeight = configuration.screenHeightDp.dp
+                    MenuSection(screenHeight, screenWidth, mbiNavController, viewModel)
+                }
             }
 
         }
@@ -141,7 +149,7 @@ fun Mbi() {
 fun BottomBar(mbiNavController: NavHostController) {
     val uiColor = if (isSystemInDarkTheme()) Black else White
 
-    Surface(color = uiColor) {
+    Surface(color = uiColor,) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

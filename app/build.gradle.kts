@@ -113,6 +113,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation ("com.google.firebase:firebase-auth:22.3.1")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation ("io.coil-kt:coil-compose:1.4.0")
 
 
 
